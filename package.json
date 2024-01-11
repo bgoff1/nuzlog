@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc && vite build",
     "dev": "vite",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "echo 'Tests not set up yet'"
   },
   "commitlint": {
     "extends": [
