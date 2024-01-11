@@ -21,20 +21,27 @@
     "bracketSameLine": true,
     "plugins": [
       "prettier-plugin-packagejson",
-      "prettier-plugin-organize-imports"
+      "prettier-plugin-organize-imports",
+      "prettier-plugin-tailwindcss"
     ]
   },
   "dependencies": {
     "solid-js": "^1.8.7"
   },
   "devDependencies": {
+    "@catppuccin/tailwindcss": "^0.1.6",
     "@commitlint/cli": "^18.4.4",
     "@commitlint/config-conventional": "^18.4.4",
+    "autoprefixer": "^10.4.16",
+    "cssnano": "^6.0.3",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
+    "postcss": "^8.4.33",
     "prettier": "^3.1.1",
     "prettier-plugin-organize-imports": "^3.2.4",
     "prettier-plugin-packagejson": "^2.4.9",
+    "prettier-plugin-tailwindcss": "^0.5.11",
+    "tailwindcss": "^3.4.1",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
     "vite-plugin-solid": "^2.8.0"
