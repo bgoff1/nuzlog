@@ -104,7 +104,7 @@ async function main() {
       : "NonParameterizedRoutes"
   };
   
-  export default definitions;`;
+  export const routes = definitions;`;
 
   const formattedContent = await prettier
     .format(content, {

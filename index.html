@@ -1,13 +1,72 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="h-full">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + Solid + TS</title>
+    <title>Nuzlocke Log</title>
+
+    <base href="/" />
+
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
+    <meta name="description" content="This is a PWA Starter app" />
+
+    <meta name="theme-color" id="theme-color" content="#caa6f7" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Nuzlocke Log" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+
+    <link rel="icon" type="image/svg+xml" href="/pwa/icon.svg" />
+
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <link rel="apple-touch-icon" href="/pwa/apple-touch-icon-180x180.png" />
+
+    <link
+      href="/pwa/iphone5_splash.png"
+      media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
+      rel="apple-touch-startup-image" />
+    <link
+      href="/pwa/iphone6_splash.png"
+      media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
+      rel="apple-touch-startup-image" />
+    <link
+      href="/pwa/iphoneplus_splash.png"
+      media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)"
+      rel="apple-touch-startup-image" />
+    <link
+      href="/pwa/iphonex_splash.png"
+      media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)"
+      rel="apple-touch-startup-image" />
+    <link
+      href="/pwa/iphonexr_splash.png"
+      media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)"
+      rel="apple-touch-startup-image" />
+    <link
+      href="/pwa/iphonexsmax_splash.png"
+      media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)"
+      rel="apple-touch-startup-image" />
+    <link
+      href="/pwa/ipad_splash.png"
+      media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)"
+      rel="apple-touch-startup-image" />
+    <link
+      href="/pwa/ipadpro1_splash.png"
+      media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)"
+      rel="apple-touch-startup-image" />
+    <link
+      href="/pwa/ipadpro3_splash.png"
+      media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)"
+      rel="apple-touch-startup-image" />
+    <link
+      href="/pwa/ipadpro2_splash.png"
+      media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
+      rel="apple-touch-startup-image" />
   </head>
-  <body class="bg-base">
-    <div id="root"></div>
+  <body class="h-full">
+    <div id="root" class="h-full"></div>
     <script type="module" src="/src/index.tsx"></script>
   </body>
 </html>
