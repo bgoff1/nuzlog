@@ -38,6 +38,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Build Routes
+        run: pnpm routes
+
       - name: Build application
         run: pnpm build
 

@@ -7,6 +7,7 @@
     "build": "tsc && vite build",
     "dev": "vite",
     "preview": "vite preview",
+    "routes": "tsc -p scripts/tsconfig.json && node scripts/gen-route-tree.js && rm scripts/gen-route-tree.js",
     "test": "echo 'Tests not set up yet'"
   },
   "commitlint": {
@@ -26,12 +27,14 @@
     ]
   },
   "dependencies": {
+    "@solidjs/router": "^0.10.8",
     "solid-js": "^1.8.7"
   },
   "devDependencies": {
     "@catppuccin/tailwindcss": "^0.1.6",
     "@commitlint/cli": "^18.4.4",
     "@commitlint/config-conventional": "^18.4.4",
+    "@types/node": "^20.11.0",
     "autoprefixer": "^10.4.16",
     "cssnano": "^6.0.3",
     "husky": "^8.0.3",

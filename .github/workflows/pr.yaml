@@ -7,6 +7,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
 
     steps:
       - name: Checkout
@@ -38,12 +40,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - uses: nrwl/nx-set-shas@v3
-
-      - run: git branch --track main origin/main
+      - name: Build Routes
+        run: pnpm routes
 
       - name: Build application
         run: pnpm build
 
       - name: Test application
         run: pnpm test
+
+      - uses: hmarr/auto-approve-action@v3
+        with:
+          review-message: "Auto approved automated PR"
