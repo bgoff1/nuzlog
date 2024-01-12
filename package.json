@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc && vite build",
     "dev": "vite",
+    "lint": "eslint src",
     "preview": "vite preview",
     "routes": "tsc -p scripts/tsconfig.json && node scripts/dist && rm -rf scripts/dist",
     "test": "echo 'Tests not set up yet'"
@@ -35,9 +36,14 @@
     "@commitlint/cli": "^18.4.4",
     "@commitlint/config-conventional": "^18.4.4",
     "@types/node": "^20.11.0",
+    "@typescript-eslint/eslint-plugin": "^6.18.1",
+    "@typescript-eslint/parser": "^6.18.1",
     "autoprefixer": "^10.4.16",
     "cssnano": "^6.0.3",
     "daisyui": "^4.6.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-solid": "^0.13.1",
+    "eslint-plugin-tailwindcss": "^3.13.1",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
     "postcss": "^8.4.33",

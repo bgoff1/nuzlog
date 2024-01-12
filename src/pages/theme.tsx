@@ -1,6 +1,8 @@
-import { Component, For } from "solid-js";
+import type { Component } from "solid-js";
+import { For } from "solid-js";
 import { META_THEME_ID } from "../util/constants";
-import { ThemeName, themes } from "../util/themes";
+import type { ThemeName } from "../util/themes";
+import { themes } from "../util/themes";
 import { titleCase } from "../util/titlecase";
 
 const ThemePage: Component = () => {
@@ -21,7 +23,9 @@ const ThemePage: Component = () => {
       <div class="grid grid-rows-2 gap-4 sm:grid-cols-2">
         <For each={themes}>
           {(item) => (
-            <button class="bg-neutral p-3 rounded" onClick={() => setThemeTo(item)}>
+            <button
+              class="rounded bg-neutral p-3"
+              onClick={() => setThemeTo(item)}>
               {titleCase(item)}
               <img src={`/themes/${item}.svg`} width={300} height={150} />
             </button>
