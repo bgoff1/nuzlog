@@ -4,7 +4,7 @@ import type { JSX } from "solid-js";
 import type {
   NonParameterizedRoutes,
   ParameterizedRoutes,
-} from "../route-tree.gen";
+} from "../../route-tree.gen";
 
 type LinkWithParams<TRoute extends keyof ParameterizedRoutes> = {
   href: TRoute;

@@ -1,14 +1,29 @@
-export const getPathFromFileName = (file: string): string =>
-  file
-    .replace(".tsx", "")
+import path from "path";
+import { FALLBACK_FILE_NAME, LAYOUT_FILE, ROUTES_DIRECTORY } from "./const";
+
+export const getPathFromFileName = (fileName: string): string => {
+  const replacedFileName = fileName
     .replace(/\(.+\)/, "")
     .replace("index", "")
-    .replace("_layout", "")
-    .replace(/\/$/, "");
+    .replace(".tsx", "")
+    .replace(/\[(.+)\]/, ":$1");
 
-export const countSlashes = (s: string): number => {
-  return s
-    .split("")
-    .filter((s) => s === "/")
-    .join("").length;
+  if (replacedFileName === FALLBACK_FILE_NAME) {
+    return "**";
+  }
+
+  return replacedFileName;
+};
+
+export const buildDynamicImport = (slashPaddedPath: string) => {
+  const fileName = slashPaddedPath.slice(1);
+  return `lazy(() => import('${path.resolve(ROUTES_DIRECTORY, fileName)}'))`;
+};
+
+export const buildLayoutPath = (fileName: string) => {
+  const directoryName = fileName.substring(
+    0,
+    fileName.replace(/\(.+\)\//, "").lastIndexOf("/"),
+  );
+  return `${directoryName}/${LAYOUT_FILE}`;
 };
