@@ -1,3 +1,3 @@
-const Page = () => <h1>this is a page</h1>;
+const Page = () => <h1>this is page</h1>;
 
 export default Page;

@@ -1,8 +1,10 @@
 import fs from "fs/promises";
-import path from "path";
 import prettier from "prettier";
-
-const routesDirectory = "./src/pages";
+import { exit } from "process";
+import { ROUTES_DIRECTORY } from "./const";
+import { filterFiles } from "./files";
+import { buildRouteDefinitions } from "./routes";
+import { getPathFromFileName } from "./utils";
 
 const splitRoutes = (
   definitions: string[],
@@ -36,53 +38,41 @@ const getAllParameters = (route: string) => {
   return result;
 };
 
-async function filterFiles(filesOrDirectories: string[]) {
-  const results: string[] = [];
-  for (const fileOrDirectory of filesOrDirectories) {
-    const stats = await fs.stat(path.resolve(routesDirectory, fileOrDirectory));
-    if (!stats.isDirectory()) {
-      results.push(fileOrDirectory);
-    }
-  }
-
-  return results;
-}
-
 async function main() {
-  const filesOrDirectories = await fs.readdir(routesDirectory, {
+  const filesOrDirectories = await fs.readdir(ROUTES_DIRECTORY, {
     recursive: true,
   });
   const files = await filterFiles(filesOrDirectories);
 
   const routes = files.map((file) => ({
-    path: file
-      .replace(".tsx", "")
-      .replace(/\(.+\)/, "")
-      .replace("index", "")
-      .replace(/\/$/, ""),
+    path: getPathFromFileName(file),
     file,
   }));
 
-  const definitions = routes.map((route) => {
-    return {
-      content: `{
-      path: '/${route.path}',
-      component: lazy(() => import('${path.resolve(
-        routesDirectory,
-        route.file,
-      )}')),
-    }`,
-      path: `'/${route.path}'`,
-    };
-  });
+  const definitions = buildRouteDefinitions(routes);
 
   const stringRouteDefinitions = definitions
     .map((def) => def.content)
     .join(", ");
 
-  const { normal, parameters } = splitRoutes(
-    definitions.map((def) => def.path),
-  );
+  const paths = [
+    ...new Set(
+      definitions.reduce((previous, current) => {
+        return [
+          ...previous,
+          current.path,
+          ...current.children.map((child) => child.path),
+        ];
+      }, [] as string[]),
+    ),
+  ];
+
+  const { normal, parameters } = splitRoutes(paths);
+
+  if (!normal.length && !parameters.length) {
+    console.error("You have no routes.");
+    exit(1);
+  }
 
   const parameterizedRoutes = parameters.map((current) => ({
     path: current,
@@ -91,6 +81,14 @@ async function main() {
       .join("\n"),
   }));
 
+  const stringParameterizedRoutes = `export type ParameterizedRoutes = { ${
+    parameterizedRoutes.length
+      ? parameterizedRoutes
+          .map((route) => `${route.path}: {${route.value}}`)
+          .join("\n")
+      : "[key: string]: never"
+  } };`;
+
   const content = `import { lazy } from 'solid-js';
   import { RouteDefinition } from '@solidjs/router';
 
@@ -98,11 +96,13 @@ async function main() {
 
   export type NonParameterizedRoutes = ${normal.join(" | ")};
 
-  export type ParameterizedRoutes = { ${parameterizedRoutes
-    .map((route) => `${route.path}: {${route.value}}`)
-    .join("\n")} };
+  ${stringParameterizedRoutes}
 
-  export type Routes = NonParameterizedRoutes | ParameterizedRoutes;
+  export type Routes = ${
+    stringParameterizedRoutes
+      ? "NonParameterizedRoutes | ParameterizedRoutes"
+      : "NonParameterizedRoutes"
+  };
   
   export default definitions;`;
 
@@ -114,7 +114,8 @@ async function main() {
     .catch((e) => ({ isError: true, error: e }));
 
   if ("isError" in formattedContent) {
-    console.log(formattedContent.error);
+    console.error(formattedContent.error);
+    exit(1);
   } else {
     await fs.writeFile("./src/route-tree.gen.ts", formattedContent.content, {
       encoding: "utf-8",
