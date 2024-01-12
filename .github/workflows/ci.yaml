@@ -41,6 +41,9 @@ jobs:
       - name: Build Routes
         run: pnpm routes
 
+      - name: Lint application
+        run: pnpm lint
+
       - name: Build application
         run: pnpm build
 

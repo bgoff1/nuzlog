@@ -1,4 +1,4 @@
-import { JSX } from "solid-js/h/jsx-runtime";
+import type { JSX } from "solid-js/h/jsx-runtime";
 
 const Layout = (props: { children?: JSX.Element }) => {
   return (

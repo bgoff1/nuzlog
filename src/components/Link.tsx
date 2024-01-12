@@ -1,6 +1,10 @@
-import { A, AnchorProps } from "@solidjs/router";
-import { JSX } from "solid-js";
-import { NonParameterizedRoutes, ParameterizedRoutes } from "../route-tree.gen";
+import type { AnchorProps } from "@solidjs/router";
+import { A } from "@solidjs/router";
+import type { JSX } from "solid-js";
+import type {
+  NonParameterizedRoutes,
+  ParameterizedRoutes,
+} from "../route-tree.gen";
 
 type LinkWithParams<TRoute extends keyof ParameterizedRoutes> = {
   href: TRoute;
