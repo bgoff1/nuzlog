@@ -1,30 +1,13 @@
 import type { Component } from "solid-js";
-import { For, createEffect } from "solid-js";
-import { META_THEME_ID, STORAGE_THEME } from "../util/constants";
-import type { ThemeName } from "../util/themes";
+import { For } from "solid-js";
+import { useThemeContext } from "../context/theme";
+import type { Theme } from "../util/themes";
 import { themes } from "../util/themes";
 import { titleCase } from "../util/titlecase";
 
 const ThemePage: Component = () => {
-  const setThemeTo = (theme: ThemeName, setStorage = true) => {
-    const root = document.getElementsByTagName("body")[0];
-    root.setAttribute("data-theme", theme);
-
-    const style = getComputedStyle(root).getPropertyValue("--p");
-    document
-      .getElementById(META_THEME_ID)
-      ?.setAttribute("content", `oklch(${style})`);
-
-    if (setStorage) {
-      localStorage.setItem(STORAGE_THEME, theme);
-    }
-  };
-
-  createEffect(() => {
-    const theme =
-      (localStorage.getItem(STORAGE_THEME) as ThemeName) ?? themes[0];
-    setThemeTo(theme, false);
-  });
+  const [, { update }] = useThemeContext();
+  const setThemeTo = (theme: Theme) => update(theme);
 
   return (
     <div class="flex h-full flex-col items-center justify-center gap-4 text-center">
