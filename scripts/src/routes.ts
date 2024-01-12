@@ -29,8 +29,6 @@ export const buildRouteDefinitions = (
           countSlashes(r.file) === currentRoutePaths && r.file !== route.file,
       );
 
-      console.log(siblingRoutes);
-
       const children = siblingRoutes.map((r) => ({
         children: [],
         content: `{${generateRouteConfig(r)}}`,

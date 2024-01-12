@@ -42,7 +42,7 @@ async function main() {
   const filesOrDirectories = await fs.readdir(ROUTES_DIRECTORY, {
     recursive: true,
   });
-  const files = await filterFiles(filesOrDirectories)
+  const files = await filterFiles(filesOrDirectories);
 
   const routes = files.map((file) => ({
     path: getPathFromFileName(file),
@@ -81,11 +81,13 @@ async function main() {
       .join("\n"),
   }));
 
-  const stringParameterizedRoutes = parameterizedRoutes.length
-    ? `export type ParameterizedRoutes = { ${parameterizedRoutes
-        .map((route) => `${route.path}: {${route.value}}`)
-        .join("\n")} };`
-    : "";
+  const stringParameterizedRoutes = `export type ParameterizedRoutes = { ${
+    parameterizedRoutes.length
+      ? parameterizedRoutes
+          .map((route) => `${route.path}: {${route.value}}`)
+          .join("\n")
+      : "[key: string]: never"
+  } };`;
 
   const content = `import { lazy } from 'solid-js';
   import { RouteDefinition } from '@solidjs/router';
@@ -112,7 +114,8 @@ async function main() {
     .catch((e) => ({ isError: true, error: e }));
 
   if ("isError" in formattedContent) {
-    console.log(formattedContent.error);
+    console.error(formattedContent.error);
+    exit(1);
   } else {
     await fs.writeFile("./src/route-tree.gen.ts", formattedContent.content, {
       encoding: "utf-8",
