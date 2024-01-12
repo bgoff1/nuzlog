@@ -9,7 +9,13 @@ module.exports = {
     "plugin:solid/recommended",
   ],
   parser: "@typescript-eslint/parser",
-  ignorePatterns: ["dist", "public", ".eslintrc.cjs", "*.gen.ts"],
+  ignorePatterns: [
+    "dist",
+    "public",
+    ".eslintrc.cjs",
+    "*.gen.ts",
+    "postcss.config.js",
+  ],
   parserOptions: { ecmaVersion: "latest", sourceType: "module" },
   rules: {
     "@typescript-eslint/no-unused-vars": [

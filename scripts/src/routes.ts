@@ -1,62 +1,66 @@
-import path from "path";
-import { ROUTES_DIRECTORY } from "./const";
-import { countSlashes } from "./utils";
+import { LAYOUT_FILE } from "./const";
+import {
+  buildDynamicImport,
+  buildLayoutPath,
+  getPathFromFileName,
+} from "./utils";
 
-export interface Route {
-  content: string;
+type RouteDefinition = {
   path: string;
-  children: Route[];
-}
-
-const generateRouteConfig = (route: { path: string; file: string }): string => {
-  return `path: '/${route.path}',
-  component: lazy(() => import('${path.resolve(
-    ROUTES_DIRECTORY,
-    route.file,
-  )}'))`;
+  component?: string;
+  children?: RouteDefinition[];
 };
 
-export const buildRouteDefinitions = (
-  routes: { path: string; file: string }[],
-) => {
-  const addedRoutes = new Set<string>();
+type Level = {
+  [key: string]: RouteDefinition[] | Level;
+};
 
-  return routes.reduce((previous, route) => {
-    if (route.file.includes("_layout.tsx")) {
-      const currentRoutePaths = countSlashes(route.file);
-      const siblingRoutes = routes.filter(
-        (r) =>
-          countSlashes(r.file) === currentRoutePaths && r.file !== route.file,
-      );
+export const buildRouteTree = (routes: string[]): RouteDefinition[] => {
+  const nonLayoutRoutes = routes.filter(
+    (fileName) => !fileName.includes(LAYOUT_FILE),
+  );
 
-      const children = siblingRoutes.map((r) => ({
-        children: [],
-        content: `{${generateRouteConfig(r)}}`,
-        path: `'/${r.path}'`,
-      }));
+  const allRoutes: RouteDefinition[] = [];
+  const level: Level = { result: allRoutes };
 
-      const layoutRoute: Route = {
-        content: `{${generateRouteConfig(route)},
-        children: [${children.map((child) => child.content).join(",")}]}`,
-        path: `'/${route.path}'`,
-        children,
-      };
+  nonLayoutRoutes.forEach((fullPath) => {
+    const pageKeys = fullPath.split("/");
 
-      siblingRoutes.forEach((route) => addedRoutes.add(route.file));
+    pageKeys.reduce((r, fullName) => {
+      const path = getPathFromFileName(fullName);
+      const isFile = fullName.includes(".tsx");
 
-      return [...previous, layoutRoute];
-    }
+      if (!r[path]) {
+        r[path] = { result: [] };
 
-    if (addedRoutes.has(route.file)) {
-      return previous;
-    }
+        // if we are on a route file
+        if (isFile) {
+          (r.result as RouteDefinition[]).push({
+            path,
+            component: buildDynamicImport(fullPath),
+          });
+        } else {
+          const layoutPath = buildLayoutPath(fullPath);
 
-    const newRoute: Route = {
-      content: `{${generateRouteConfig(route)}}`,
-      path: `'/${route.path}'`,
-      children: [],
-    };
+          const folderHasLayoutRoute = routes.some(
+            (glob) => glob === layoutPath,
+          );
 
-    return [...previous, newRoute];
-  }, [] as Route[]);
+          (r.result as RouteDefinition[]).push({
+            path,
+            ...(folderHasLayoutRoute
+              ? {
+                  component: buildDynamicImport(layoutPath),
+                }
+              : {}),
+            children: (r[path] as Level).result as RouteDefinition[],
+          });
+        }
+      }
+
+      return r[path] as Level;
+    }, level);
+  });
+
+  return allRoutes;
 };

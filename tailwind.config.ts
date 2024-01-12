@@ -1,12 +1,22 @@
 import { flavors } from "@catppuccin/palette";
-import daisyui, { Config as DaisyUIConfig } from "daisyui";
-import { Config } from "tailwindcss/types/config";
+import type { Config as DaisyUIConfig } from "daisyui";
+import daisyui from "daisyui";
+import tailwindPlugin from "tailwindcss/plugin";
+import type { Config } from "tailwindcss/types/config";
 
 const theme: Config & { daisyui: DaisyUIConfig } = {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     colors: {},
-    extend: {},
+    extend: {
+      gridTemplateColumns: {
+        "auto-1fr": "auto 1fr",
+        "auto-1fr-auto": "auto 1fr auto",
+      },
+      gridTemplateRows: {
+        "auto-1fr-auto": "auto 1fr auto",
+      },
+    },
     screens: {
       "max-0": [{ max: "0px" }],
       "max-xs": [{ max: "400px" }],
@@ -22,7 +32,24 @@ const theme: Config & { daisyui: DaisyUIConfig } = {
       xl: [{ min: "1280px" }],
     },
   },
-  plugins: [daisyui],
+  plugins: [
+    daisyui,
+    tailwindPlugin((plugin) => {
+      plugin.addUtilities({
+        ".grid-layout-main": {
+          gridTemplateAreas: "'header header' 'sidebar main' 'sidebar footer'",
+        },
+        ...["header", "sidebar", "main", "footer"].reduce((prev, curr) => {
+          return {
+            ...prev,
+            [`.${curr}-area`]: {
+              gridArea: curr,
+            },
+          };
+        }, {}),
+      });
+    }),
+  ],
   daisyui: {
     logs: false,
     darkTheme: "mocha",
@@ -73,6 +100,8 @@ const theme: Config & { daisyui: DaisyUIConfig } = {
           accent: flavors.latte.colors.pink.hex,
           neutral: flavors.latte.colors.surface0.hex,
           "base-100": flavors.latte.colors.base.hex,
+          "base-200": flavors.latte.colors.crust.hex,
+          "base-300": flavors.latte.colors.mantle.hex,
           info: flavors.latte.colors.blue.hex,
           success: flavors.latte.colors.green.hex,
           warning: flavors.latte.colors.peach.hex,
