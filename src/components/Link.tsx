@@ -17,7 +17,3 @@ export const Link = <TRoute extends keyof ParameterizedRoutes>(
 ) => {
   return <A {...props} />;
 };
-
-const Whatever = () => {
-  return <Link href="/team-builder/">boo</Link>;
-};

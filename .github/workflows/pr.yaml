@@ -38,9 +38,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - uses: nrwl/nx-set-shas@v3
-
-      - run: git branch --track main origin/main
+      - name: Build Routes
+        run: pnpm routes
 
       - name: Build application
         run: pnpm build
