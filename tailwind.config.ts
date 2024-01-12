@@ -7,11 +7,25 @@ const theme: Config & { daisyui: DaisyUIConfig } = {
   theme: {
     colors: {},
     extend: {},
+    screens: {
+      "max-0": [{ max: "0px" }],
+      "max-xs": [{ max: "400px" }],
+      "max-sm": [{ max: "640px" }],
+      "max-md": [{ max: "768px" }],
+      "max-lg": [{ max: "1024px" }],
+      "max-xl": [{ max: "1280px" }],
+      0: [{ min: "0px" }],
+      xs: [{ min: "400px" }],
+      sm: [{ min: "640px" }],
+      md: [{ min: "768px" }],
+      lg: [{ min: "1024px" }],
+      xl: [{ min: "1280px" }],
+    },
   },
   plugins: [daisyui],
   daisyui: {
     logs: false,
-    darkTheme: 'mocha',
+    darkTheme: "mocha",
     themes: [
       {
         mocha: {
