@@ -4,5 +4,6 @@ export {
   TbDatabase as DatabaseIcon,
   TbMenu2 as HamburgerIcon,
   TbPokeball as PokeballIcon,
+  TbRefresh as RefreshIcon,
   TbPalette as ThemeIcon,
 } from "solid-icons/tb";

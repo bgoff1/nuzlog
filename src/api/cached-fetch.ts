@@ -1,6 +1,10 @@
-import type { EndpointKey, Endpoints } from "@bgoff1/pokeapi-types";
-import { get, keys, set } from "idb-keyval";
-import { buildURL } from "./build-url";
+import type {
+  EndpointKey,
+  Endpoints,
+  NamedAPIResourceList,
+} from "@bgoff1/pokeapi-types";
+import { delMany, get, keys, set } from "idb-keyval";
+import { buildURL, getEndpointFromURL } from "./build-url";
 import { bumpLastUpdate } from "./last-update";
 
 const cachedFetch = async <T>(key: EndpointKey): Promise<T> => {
@@ -21,7 +25,9 @@ const cachedFetch = async <T>(key: EndpointKey): Promise<T> => {
 
   const data = await response.json();
 
-  await bumpLastUpdate(key);
+  const updateKey = getEndpointFromURL(key);
+
+  await bumpLastUpdate(updateKey);
 
   await set(key, data);
 
@@ -42,3 +48,16 @@ export const fetchFunction = async <T extends EndpointKey>(
 };
 
 export const getCacheKeys = (): Promise<string[]> => keys();
+
+export const updateKey = async (key: EndpointKey, keysToDelete: string[]) => {
+  if (keys.length) {
+    await delMany(keysToDelete);
+  }
+
+  const resource = (await fetchFunction(key, {})) as NamedAPIResourceList;
+
+  for (const each of resource.results) {
+    const newURL = each.url;
+    await fetchFunction(newURL as EndpointKey, {});
+  }
+};
