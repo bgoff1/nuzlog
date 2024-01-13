@@ -6,7 +6,7 @@ export const getPathFromFileName = (fileName: string): string => {
     .replace(/\(.+\)/, "")
     .replace("index", "")
     .replace(".tsx", "")
-    .replace(/\[(.+)\]/, ":$1");
+    .replace(/\[([\w-]+)\]/g, ":$1");
 
   if (replacedFileName === FALLBACK_FILE_NAME) {
     return "**";

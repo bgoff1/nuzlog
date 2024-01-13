@@ -13,9 +13,7 @@ const Layout = (props: { children?: JSX.Element }) => {
     <ThemeProvider>
       <Header toggle={toggle} />
       <Sidebar closeSidebar={close} open={open()} />
-      <main class="flex flex-col overflow-auto main-area">
-        {props.children}
-      </main>
+      {props.children}
     </ThemeProvider>
   );
 };

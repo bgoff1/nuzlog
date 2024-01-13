@@ -10,7 +10,7 @@ const ThemePage: Component = () => {
   const setThemeTo = (theme: Theme) => update(theme);
 
   return (
-    <div class="flex h-full flex-col items-center justify-center gap-4 text-center">
+    <main class="flex h-full flex-col items-center justify-center gap-4 text-center">
       <h1 class="text-4xl">Change your Theme</h1>
 
       <div class="grid grid-rows-2 gap-4 sm:grid-cols-2">
@@ -25,7 +25,7 @@ const ThemePage: Component = () => {
           )}
         </For>
       </div>
-    </div>
+    </main>
   );
 };
 

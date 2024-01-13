@@ -1,8 +1,8 @@
 import fs from "fs/promises";
-import prettier from "prettier";
 import { exit } from "process";
 import { ROUTES_DIRECTORY } from "./const";
 import { filterFiles, getAllParameters, splitRoutes } from "./files";
+import { formatTypescript, isFormattedError } from "./formatting";
 import { buildRouteTree } from "./routes";
 import { getPathFromFileName } from "./utils";
 
@@ -46,25 +46,6 @@ const stringifyRoutes = (
   };`;
 
   return { parameters, normal, both };
-};
-
-type FormatSuccess = { text: string };
-type FormatFailure = { isError: true; error: unknown };
-type FormatResult = FormatFailure | FormatSuccess;
-
-const formatTypescript = async (code: string): Promise<FormatResult> => {
-  try {
-    const text = await prettier.format(code, {
-      parser: "typescript",
-    });
-    return { text };
-  } catch (e) {
-    return { isError: true, error: e };
-  }
-};
-
-const isFormattedError = (input: FormatResult): input is FormatFailure => {
-  return (input as { isError: true }).isError === true;
 };
 
 async function main() {

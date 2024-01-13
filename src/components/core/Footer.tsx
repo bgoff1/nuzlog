@@ -30,7 +30,7 @@ const LinkFooterButton = (props: LinkItem) => {
 
 export const Footer = (props: { items: LinkItem[] }) => {
   return (
-    <footer class="flex justify-center gap-2 border-t border-neutral bg-base-300">
+    <footer class="flex justify-center gap-2 border-t border-neutral bg-base-300 footer-area">
       <For each={props.items}>
         {(item) => (
           <>
