@@ -13,7 +13,7 @@ const HomePage: Component = () => {
   ];
 
   return (
-    <div class="flex h-full flex-col items-center justify-center gap-4 text-center">
+    <main class="flex h-full flex-col items-center justify-center gap-4 text-center">
       <h1 class="text-4xl">Home</h1>
 
       <div class={clsx(buttons.length > 1 && "grid-cols-2", "grid gap-4")}>
@@ -25,7 +25,7 @@ const HomePage: Component = () => {
           )}
         </For>
       </div>
-    </div>
+    </main>
   );
 };
 

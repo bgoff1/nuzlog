@@ -16,6 +16,9 @@ const theme: Config & { daisyui: DaisyUIConfig } = {
       gridTemplateRows: {
         "auto-1fr-auto": "auto 1fr auto",
       },
+      animation: {
+        spinning: "spin 3s linear infinite",
+      },
     },
     screens: {
       "max-0": [{ max: "0px" }],
@@ -39,7 +42,7 @@ const theme: Config & { daisyui: DaisyUIConfig } = {
         ".grid-layout-main": {
           gridTemplateAreas: "'header header' 'sidebar main' 'sidebar footer'",
         },
-        ...["header", "sidebar", "main", "footer"].reduce((prev, curr) => {
+        ...["header", "sidebar", "footer"].reduce((prev, curr) => {
           return {
             ...prev,
             [`.${curr}-area`]: {
@@ -47,6 +50,10 @@ const theme: Config & { daisyui: DaisyUIConfig } = {
             },
           };
         }, {}),
+        main: {
+          gridArea: "main",
+          padding: "0.75rem",
+        },
       });
     }),
   ],

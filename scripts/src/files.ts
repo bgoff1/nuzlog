@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
-import { ROUTES_DIRECTORY } from "./const";
+import { PARAMETER_MATCH_REGEX, ROUTES_DIRECTORY } from "./const";
 
 export const filterFiles = async (filesOrDirectories: string[]) => {
   const results: string[] = [];
@@ -29,7 +29,7 @@ export const splitRoutes = (
   const [normal, parameters]: [string[], string[]] = [[], []];
 
   for (const definition of definitions) {
-    if (definition.match(/\[(.+)\]/)?.length) {
+    if (definition.match(PARAMETER_MATCH_REGEX)?.length) {
       parameters.push(definition);
     } else {
       normal.push(definition);
@@ -47,10 +47,10 @@ export const getAllParameters = (route: string) => {
   const result: string[] = [];
 
   do {
-    const paramMatch = string.match(/\[([\w-]+)\]/)!;
+    const paramMatch = string.match(PARAMETER_MATCH_REGEX)!;
     result.push(paramMatch[1]);
-    string = string.substring(string.indexOf("]") + 1);
-  } while (string.match(/\[([\w-]+)\]/));
+    string = string.substring(paramMatch.index! + paramMatch[1].length + 1);
+  } while (string.match(PARAMETER_MATCH_REGEX));
 
   return result;
 };

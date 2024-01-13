@@ -1,3 +1,11 @@
-const Page = () => <h1 class="text-3xl">this is team builder options page</h1>;
+import { createResource } from "solid-js";
+import { fetchFunction } from "../../api/cached-fetch";
 
+const Page = () => {
+  const [data] = createResource(() =>
+    fetchFunction("/pokemon", { query: { offset: 20 } }),
+  );
+
+  return <pre class="overflow-y-auto">{JSON.stringify(data(), null, 2)}</pre>;
+};
 export default Page;

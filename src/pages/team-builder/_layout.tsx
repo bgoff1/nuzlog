@@ -5,7 +5,7 @@ import { Footer } from "../../components/core/Footer";
 const TeamBuilderLayout = (props: { children?: JSX.Element }) => {
   return (
     <>
-      <div class="flex h-full flex-col">{props.children}</div>
+      <main class="flex h-full flex-col overflow-y-auto">{props.children}</main>
       <Footer
         items={[
           {

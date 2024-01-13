@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { ThemeIcon } from "../../common/icons";
+import { DatabaseIcon, ThemeIcon } from "../../common/icons";
 import { SidebarLink } from "./SidebarLink";
 import { links } from "./links.data";
 
@@ -29,6 +29,15 @@ export const Sidebar: Component<{
           )}
         </For>
       </div>
+      <SidebarLink
+        closeSidebar={props.closeSidebar}
+        link={{
+          href: "/data-management",
+          label: "Data Management",
+          icon: DatabaseIcon,
+        }}
+        open={props.open}
+      />
       <SidebarLink
         link={{ href: "/theme", icon: ThemeIcon, label: "Theme" }}
         open={props.open}

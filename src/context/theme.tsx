@@ -1,13 +1,14 @@
 import type { Component } from "solid-js";
-import { createContext, useContext } from "solid-js";
 import { createThemeStore } from "../hooks/create-theme-store";
 import type { WithChildren } from "../types/with-children";
 import type { Theme } from "../util/themes";
+import { createContext, useContext } from "./context-helpers";
 
 type ThemeContextValue = { theme: Theme };
 type ThemeContextUpdater = { update: (newTheme: Theme) => void };
 
-const ThemeContext = createContext<[ThemeContextValue, ThemeContextUpdater]>();
+const ThemeContext =
+  createContext<[ThemeContextValue, ThemeContextUpdater]>("ThemeContext");
 
 export const ThemeProvider: Component<WithChildren> = (props) => {
   const [state, setState] = createThemeStore();
@@ -16,7 +17,6 @@ export const ThemeProvider: Component<WithChildren> = (props) => {
     state,
     {
       update(newTheme: Theme) {
-        console.log("newTheme", newTheme);
         setState("theme", newTheme);
       },
     },
@@ -29,10 +29,4 @@ export const ThemeProvider: Component<WithChildren> = (props) => {
   );
 };
 
-export const useThemeContext = () => {
-  const contextValue = useContext(ThemeContext);
-  if (!contextValue) {
-    throw new Error("ThemeContext not provided");
-  }
-  return contextValue;
-};
+export const useThemeContext = () => useContext(ThemeContext);

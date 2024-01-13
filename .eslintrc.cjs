@@ -29,6 +29,19 @@ module.exports = {
         caughtErrorsIgnorePattern: "^_",
       },
     ],
+    "no-restricted-imports": [
+      "error",
+      {
+        paths: [
+          {
+            name: "solid-js",
+            importNames: ["useContext", "createContext"],
+            message:
+              "Please use context methods from /context/context-helpers instead.",
+          },
+        ],
+      },
+    ],
     "object-shorthand": "error",
     "no-shadow": "error",
     "@typescript-eslint/consistent-type-imports": "error",

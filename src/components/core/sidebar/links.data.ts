@@ -23,11 +23,6 @@ export const links: LinkItem[] = [
     label: "Team Builder",
     icon: PokeballIcon,
   },
-  {
-    href: "/calculator",
-    label: "Calculator",
-    disabled: true,
-  },
 ];
 
 export const isLinkDisabled = (link: LinkItem): link is DisabledLinkItem =>

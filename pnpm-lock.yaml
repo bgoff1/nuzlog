@@ -11,6 +11,9 @@ dependencies:
   clsx:
     specifier: ^2.1.0
     version: 2.1.0
+  idb-keyval:
+    specifier: ^6.2.1
+    version: 6.2.1
   solid-icons:
     specifier: ^1.1.0
     version: 1.1.0(solid-js@1.8.10)
@@ -19,6 +22,9 @@ dependencies:
     version: 1.8.10
 
 devDependencies:
+  '@bgoff1/pokeapi-types':
+    specifier: ^1.0.3
+    version: 1.0.3
   '@catppuccin/palette':
     specifier: ^1.0.3
     version: 1.0.3
@@ -1353,6 +1359,10 @@ packages:
       '@babel/helper-string-parser': 7.23.4
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
+    dev: true
+
+  /@bgoff1/pokeapi-types@1.0.3:
+    resolution: {integrity: sha512-3n/oMFj8jtHxjjvxPU3ANFLZaAqYx4eYxqvCKoaxdOg/IC5VQ9GhptcgTc0IJ7zu9hRXDel06QFQJVRb8qx8/A==}
     dev: true
 
   /@catppuccin/palette@1.0.3:
@@ -3738,6 +3748,10 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
     dev: true
+
+  /idb-keyval@6.2.1:
+    resolution: {integrity: sha512-8Sb3veuYCyrZL+VBt9LJfZjLUPWVvqn8tG28VqYNFCo43KHcKuq+b4EiXGeuaLAQWL2YmyDgMp2aSpH9JHsEQg==}
+    dev: false
 
   /idb@7.1.1:
     resolution: {integrity: sha512-gchesWBzyvGHRO9W8tzUWFDycow5gwjvFKfyV9FF32Y7F50yZMp7mP+T2mJIWFx49zicqyC4uefHM17o6xKIVQ==}
