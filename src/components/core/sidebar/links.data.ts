@@ -2,17 +2,22 @@ import type { IconTypes } from "solid-icons";
 import type { NonParameterizedRoutes } from "../../../route-tree.gen";
 import { PokeballIcon } from "../../common/icons";
 
-export type SidebarLinkType = {
+type LinkItemBase = {
   label: string;
   href: NonParameterizedRoutes;
-} & (
-  | {
-      disabled: true;
-    }
-  | { icon: IconTypes }
-);
+};
 
-export const links: SidebarLinkType[] = [
+export type DisabledLinkItem = LinkItemBase & {
+  disabled: true;
+};
+
+export type EnabledLinkItem = LinkItemBase & {
+  icon: IconTypes;
+};
+
+export type LinkItem = DisabledLinkItem | EnabledLinkItem;
+
+export const links: LinkItem[] = [
   {
     href: "/team-builder",
     label: "Team Builder",
@@ -24,3 +29,6 @@ export const links: SidebarLinkType[] = [
     disabled: true,
   },
 ];
+
+export const isLinkDisabled = (link: LinkItem): link is DisabledLinkItem =>
+  (link as DisabledLinkItem).disabled === true;

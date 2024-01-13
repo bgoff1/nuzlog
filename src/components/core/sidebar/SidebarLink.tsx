@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import type { Component } from "solid-js";
 import { Dynamic } from "solid-js/web";
-import { Link } from "../../common/Link";
 import { ConstructionIcon } from "../../common/icons";
-import type { SidebarLinkType } from "./links.data";
+import { Link } from "../../common/Link";
+import { isLinkDisabled, type LinkItem } from "./links.data";
 
 const OpenedLinkText: Component<{
   disabled?: true;
@@ -19,7 +19,7 @@ const OpenedLinkText: Component<{
 
 export const SidebarLink: Component<{
   closeSidebar: () => void;
-  link: SidebarLinkType;
+  link: LinkItem;
   open: boolean;
 }> = (props) => {
   const onClick = () => props.closeSidebar();
@@ -29,7 +29,7 @@ export const SidebarLink: Component<{
 
   return (
     <>
-      {"disabled" in props.link ? (
+      {isLinkDisabled(props.link) ? (
         <div class={clsx(className, "text-neutral")}>
           <ConstructionIcon />
           {props.open && <OpenedLinkText label={props.link.label} disabled />}
