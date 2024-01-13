@@ -48,6 +48,25 @@ const stringifyRoutes = (
   return { parameters, normal, both };
 };
 
+type FormatSuccess = { text: string };
+type FormatFailure = { isError: true; error: unknown };
+type FormatResult = FormatFailure | FormatSuccess;
+
+const formatTypescript = async (code: string): Promise<FormatResult> => {
+  try {
+    const text = await prettier.format(code, {
+      parser: "typescript",
+    });
+    return { text };
+  } catch (e) {
+    return { isError: true, error: e };
+  }
+};
+
+const isFormattedError = (input: FormatResult): input is FormatFailure => {
+  return (input as { isError: true }).isError === true;
+};
+
 async function main() {
   console.log("♻️  Generating routes...");
   const start = Date.now();
@@ -86,14 +105,9 @@ async function main() {
     strings.both,
   ].join("\n");
 
-  const formattedContent = await prettier
-    .format(content, {
-      parser: "typescript",
-    })
-    .then((text) => ({ text }))
-    .catch((e) => ({ isError: true, error: e }));
+  const formattedContent = await formatTypescript(content);
 
-  if ("isError" in formattedContent) {
+  if (isFormattedError(formattedContent)) {
     console.error(formattedContent.error);
     exit(1);
   } else {

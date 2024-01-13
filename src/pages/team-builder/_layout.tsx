@@ -1,13 +1,27 @@
 import type { JSX } from "solid-js";
+import { PokeballIcon } from "../../components/common/icons";
+import { Footer } from "../../components/core/Footer";
 
-const Layout = (props: { children?: JSX.Element }) => {
+const TeamBuilderLayout = (props: { children?: JSX.Element }) => {
   return (
     <>
-      <main class="flex flex-col overflow-auto main-area">
-        {props.children}
-      </main>
+      <div class="flex h-full flex-col">{props.children}</div>
+      <Footer
+        items={[
+          {
+            href: "/team-builder",
+            icon: PokeballIcon,
+            label: "Builder",
+          },
+          {
+            href: "/team-builder/options",
+            label: "Options",
+            icon: PokeballIcon,
+          },
+        ]}
+      />
     </>
   );
 };
 
-export default Layout;
+export default TeamBuilderLayout;

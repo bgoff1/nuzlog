@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 route-tree.gen.ts
+
+# Local Netlify folder
+.netlify
