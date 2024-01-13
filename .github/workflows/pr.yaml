@@ -3,6 +3,7 @@ name: Pull Request Build
 on:
   pull_request:
     branches: ["main"]
+    types: [opened, edited, reopened, synchronize]
 
 jobs:
   build:
@@ -51,6 +52,9 @@ jobs:
 
       - name: Test application
         run: pnpm test
+
+      - name: Validate PR title with commitlint
+        uses: kevintyj/prlint@v1
 
       - uses: hmarr/auto-approve-action@v3
         with:
