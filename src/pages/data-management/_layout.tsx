@@ -1,6 +1,6 @@
-import { type JSX } from "solid-js";
+import type { JSX } from "solid-js";
 
-const DataManagementLayout = (props: { children: JSX.Element }) => {
+const DataManagementLayout = (props: { children?: JSX.Element }) => {
   return (
     <>
       <main>{props.children}</main>
