@@ -1,12 +1,12 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { useThemeContext } from "../context/theme";
+import { useTheme } from "../context/theme";
 import type { Theme } from "../util/themes";
 import { themes } from "../util/themes";
 import { titleCase } from "../util/titlecase";
 
 const ThemePage: Component = () => {
-  const [, { update }] = useThemeContext();
+  const [, { update }] = useTheme();
   const setThemeTo = (theme: Theme) => update(theme);
 
   return (

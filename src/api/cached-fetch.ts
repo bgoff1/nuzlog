@@ -3,16 +3,18 @@ import type {
   Endpoints,
   NamedAPIResourceList,
 } from "@bgoff1/pokeapi-types";
-import { delMany, get, keys, set } from "idb-keyval";
 import { buildURL, getEndpointFromURL } from "./build-url";
+import { db } from "./db";
 import { bumpLastUpdate } from "./last-update";
 
 const cachedFetch = async <T>(key: EndpointKey): Promise<T> => {
-  const value = await get<T>(key);
+  const value = await db.get<T>(key);
 
   if (value) {
     return value;
   }
+
+  console.debug("Fetching", key);
 
   const response = await fetch(key, {
     headers: {},
@@ -29,7 +31,7 @@ const cachedFetch = async <T>(key: EndpointKey): Promise<T> => {
 
   await bumpLastUpdate(updateKey);
 
-  await set(key, data);
+  await db.set(key, data);
 
   return data;
 };
@@ -47,11 +49,11 @@ export const fetchFunction = async <T extends EndpointKey>(
   return fetchResult;
 };
 
-export const getCacheKeys = (): Promise<string[]> => keys();
+export const getCacheKeys = (): Promise<string[]> => db.getAllKeys();
 
 export const updateKey = async (key: EndpointKey, keysToDelete: string[]) => {
-  if (keys.length) {
-    await delMany(keysToDelete);
+  if (keysToDelete.length) {
+    await db.delete(keysToDelete);
   }
 
   const resource = (await fetchFunction(key, {})) as NamedAPIResourceList;
@@ -61,3 +63,8 @@ export const updateKey = async (key: EndpointKey, keysToDelete: string[]) => {
     await fetchFunction(newURL as EndpointKey, {});
   }
 };
+
+export const getKeysMatching = (
+  keysToMatch: string[],
+  matcher: string,
+): string[] => keysToMatch.filter((key) => key.includes(`${matcher}/`));
