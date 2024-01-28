@@ -111,10 +111,9 @@ jobs:
       - name: Deploy to netlify
         if: steps.env.outputs.SHOULD_DEPLOY == 'true'
         # Needs to be in the same job as the build or else dist won't exist
-        run: npx netlify deploy --site $NETLIFY_SITE_NAME --dir dist --prod
+        run: pnpm deploy
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_NAME: ${{ secrets.NETLIFY_SITE_NAME }}
 
       - name: Update Upstash sha
         if: steps.env.outputs.SHOULD_DEPLOY == 'true'

@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc && vite build",
+    "deploy": "netlify deploy --site nuzlog --dir dist --prod",
     "dev": "vite",
     "lint": "eslint src",
     "prepare": "husky install",
