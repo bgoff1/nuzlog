@@ -15,8 +15,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    outputs:
-      should_deploy: ${{ steps.env.outputs.should_deploy }}
 
     steps:
       - name: Checkout
@@ -53,12 +51,7 @@ jobs:
           UPSTASH_URL: ${{ secrets.upstash_url }}
           UPSTASH_TOKEN: ${{ secrets.upstash_token }}
         run: |
-          echo "saved sha: $SAVED_SHA"
-          echo "current sha: $CURRENT_SHA"
-
           if [[ "$SAVED_SHA" != "$CURRENT_SHA" ]]; then
-            echo "SHAS ARE NOT EQUAL, building new database"
-            
             cd pokeapi
             
             pip install -r requirements.txt
@@ -68,12 +61,6 @@ jobs:
             cd ..
 
             cp pokeapi/db.sqlite3 public/pokemon.db
-
-            echo "finished building and copying db"
-
-            echo "CURLING $UPSTASH_URL/set/latest with value $CURRENT_SHA"
-
-            curl -X POST -d "$(echo -n $CURRENT_SHA)" $UPSTASH_URL/set/latest -H "Authorization: Bearer $UPSTASH_TOKEN"
           fi
 
       - name: Environment variables to output
@@ -115,19 +102,26 @@ jobs:
       - name: Lint application
         run: pnpm lint
 
+      - name: Test application
+        run: pnpm test
+
       - name: Build application
         run: pnpm build
 
-      - name: Test application
-        run: pnpm test
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    
-    steps:
       - name: Deploy to netlify
-        if: needs.build.outputs.should_deploy == 'true'
+        if: steps.env.outputs.should_deploy == 'true'
+        # Needs to be in the same job as the build or else dist won't exist
         run: npx netlify deploy --site $NETLIFY_SITE_NAME --dir dist --prod
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_NAME: ${{ secrets.NETLIFY_SITE_NAME }}
+
+      - name: Update Upstash sha
+        if: steps.env.outputs.should_deploy == 'true'
+        run: |
+          echo "CURLING $UPSTASH_URL/set/latest with value $CURRENT_SHA"
+
+          curl -X POST -d "$(echo -n $CURRENT_SHA)" $UPSTASH_URL/set/latest -H "Authorization: Bearer $UPSTASH_TOKEN"
+        env:
+          UPSTASH_URL: ${{ secrets.upstash_url }}
+          UPSTASH_TOKEN: ${{ secrets.upstash_token }}
