@@ -52,7 +52,12 @@ const theme: Config & { daisyui: DaisyUIConfig } = {
         }, {}),
         main: {
           gridArea: "main",
+        },
+        ".main-padding": {
           padding: "0.75rem",
+        },
+        ".progress[value]": {
+          transition: "width 0.5s",
         },
       });
     }),
@@ -102,8 +107,8 @@ const theme: Config & { daisyui: DaisyUIConfig } = {
       },
       {
         latte: {
-          primary: flavors.latte.colors.mauve.hex,
-          secondary: flavors.latte.colors.lavender.hex,
+          primary: flavors.latte.colors.lavender.hex,
+          secondary: flavors.latte.colors.mauve.hex,
           accent: flavors.latte.colors.pink.hex,
           neutral: flavors.latte.colors.surface0.hex,
           "base-100": flavors.latte.colors.base.hex,

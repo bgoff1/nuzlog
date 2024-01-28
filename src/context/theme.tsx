@@ -29,4 +29,4 @@ export const ThemeProvider: Component<WithChildren> = (props) => {
   );
 };
 
-export const useThemeContext = () => useContext(ThemeContext);
+export const useTheme = () => useContext(ThemeContext);

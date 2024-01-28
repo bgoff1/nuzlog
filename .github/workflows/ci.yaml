@@ -3,6 +3,14 @@ name: Push Build
 on:
   push:
     branches: ["main"]
+  schedule:
+    # CRON SYNTAX
+    # MINUTE (0-59)
+    # HOUR (0-23)
+    # DAY_OF_MONTH (1-31)
+    # MONTH (1-12)
+    # DAY_OF_WEEK (0-6, 0 = Sunday)
+    - cron: "30 6 * * 1-5"
 
 jobs:
   build:
@@ -13,6 +21,66 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Checkout PokeAPI repo
+        uses: actions/checkout@v4
+        with:
+          repository: "PokeAPI/pokeapi"
+          path: pokeapi
+          token: ${{ github.token }}
+          submodules: "recursive"
+
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+          cache: "pip"
+
+      - name: Set env
+        env:
+          UPSTASH_URL: ${{ secrets.upstash_url }}
+          UPSTASH_TOKEN: ${{ secrets.upstash_token }}
+        run: |
+          echo "SAVED_SHA=$(curl "$UPSTASH_URL/get/latest" -H "Authorization: Bearer $UPSTASH_TOKEN" | jq -r '.result')" >> $GITHUB_ENV
+          cd pokeapi
+          echo "CURRENT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+
+      - name: Build sqlite3 database
+        env:
+          UPSTASH_URL: ${{ secrets.upstash_url }}
+          UPSTASH_TOKEN: ${{ secrets.upstash_token }}
+        run: |
+          echo "saved sha: $SAVED_SHA"
+          echo "current sha: $CURRENT_SHA"
+
+          if [[ "$SAVED_SHA" != "$CURRENT_SHA" ]]; then
+            echo "SHAS ARE NOT EQUAL, building new database"
+            
+            cd pokeapi
+            
+            pip install -r requirements.txt
+            python manage.py migrate --settings=config.local
+            echo "from data.v2.build import build_all; build_all()" | python manage.py shell --settings=config.local
+
+            cd ..
+
+            cp pokeapi/db.sqlite3 public/pokemon.db
+
+            echo "finished building and copying db"
+
+            echo "CURLING $UPSTASH_URL/set/latest with value $CURRENT_SHA"
+
+            curl -X POST -d "$(echo -n $CURRENT_SHA)" $UPSTASH_URL/set/latest -H "Authorization: Bearer $UPSTASH_TOKEN"
+          fi
+
+      - name: Environment variables to output
+        id: env
+        run: |
+          if [[ "$SAVED_SHA" != "$CURRENT_SHA" ]]; then
+            echo "should_deploy=true" >> $GITHUB_OUTPUT
+          else
+            echo "should_deploy=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Use Node.js from package.json
         uses: actions/setup-node@v3
@@ -49,3 +117,10 @@ jobs:
 
       - name: Test application
         run: pnpm test
+
+      - name: Deploy to netlify
+        if: steps.env.outputs.should_deploy == 'true'
+        run: npx netlify deploy --site $NETLIFY_SITE_NAME --dir dist --prod
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_NAME: ${{ secrets.NETLIFY_SITE_NAME }}

@@ -20,7 +20,7 @@ const HomePage: Component = () => {
         <For each={buttons}>
           {(item) => (
             <Link href={item.href}>
-              <button class="btn btn-outline btn-primary">{item.label}</button>
+              <button class="btn btn-primary">{item.label}</button>
             </Link>
           )}
         </For>

@@ -3,7 +3,7 @@ import { useParams } from "@solidjs/router";
 import clsx from "clsx";
 import type { Accessor } from "solid-js";
 import { createResource, createSignal } from "solid-js";
-import { getCacheKeys, updateKey } from "../../api/cached-fetch";
+import { getCacheKeys, getKeysMatching } from "../../api/cached-fetch";
 import { getLastUpdate } from "../../api/last-update";
 import { RefreshIcon } from "../../components/common/icons";
 import { kebabToTitle } from "../../util/titlecase";
@@ -23,13 +23,13 @@ const CategoryPage = () => {
     reloadItems,
     async () => {
       const allKeys = await getCacheKeys();
-      return allKeys.filter((key) => key.includes(`${category}/`));
+      return getKeysMatching(allKeys, category);
     },
     { initialValue: [] },
   );
 
   return (
-    <div class="flex flex-col">
+    <main class="flex flex-col p-3">
       <h1 class="text-center text-2xl">
         {kebabToTitle(category)} - {keys().length}
       </h1>
@@ -41,13 +41,13 @@ const CategoryPage = () => {
           class="btn btn-ghost"
           onClick={async () => {
             setSpin(true);
-            await updateKey(`/${category}`, keys());
+            await new Promise((res) => setTimeout(res, 5000));
             setSpin(false);
           }}>
           <RefreshIcon class={clsx(spin() && "animate-spinning")} />
         </button>
       </h2>
-    </div>
+    </main>
   );
 };
 

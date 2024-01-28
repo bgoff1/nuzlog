@@ -2,6 +2,7 @@ import type { JSX } from "solid-js";
 import { createSignal } from "solid-js";
 import { Header } from "../components/core/Header";
 import { Sidebar } from "../components/core/sidebar/Sidebar";
+import { InstallProvider } from "../context/install";
 import { ThemeProvider } from "../context/theme";
 
 const Layout = (props: { children?: JSX.Element }) => {
@@ -11,9 +12,11 @@ const Layout = (props: { children?: JSX.Element }) => {
 
   return (
     <ThemeProvider>
-      <Header toggle={toggle} />
-      <Sidebar closeSidebar={close} open={open()} />
-      {props.children}
+      <InstallProvider>
+        <Header toggle={toggle} />
+        <Sidebar closeSidebar={close} open={open()} />
+        {props.children}
+      </InstallProvider>
     </ThemeProvider>
   );
 };

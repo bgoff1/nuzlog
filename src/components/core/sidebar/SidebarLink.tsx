@@ -1,8 +1,10 @@
 import clsx from "clsx";
 import type { Component } from "solid-js";
 import { Dynamic } from "solid-js/web";
+import type { IconTypes } from "../../common/icons";
 import { ConstructionIcon } from "../../common/icons";
 import { Link } from "../../common/Link";
+import type { EnabledLinkItem } from "./links.data";
 import { isLinkDisabled, type LinkItem } from "./links.data";
 
 const OpenedLinkText: Component<{
@@ -17,9 +19,20 @@ const OpenedLinkText: Component<{
   );
 };
 
+const SidebarContent: Component<{
+  icon: IconTypes;
+  label: string;
+  open: boolean;
+}> = (props) => (
+  <>
+    <Dynamic component={props.icon} />
+    {props.open && <OpenedLinkText label={props.label} />}
+  </>
+);
+
 export const SidebarLink: Component<{
   closeSidebar: () => void;
-  link: LinkItem;
+  link: LinkItem | (Omit<EnabledLinkItem, "href"> & { noLink: true });
   open: boolean;
 }> = (props) => {
   const onClick = () => props.closeSidebar();
@@ -27,23 +40,35 @@ export const SidebarLink: Component<{
   const className =
     "grid h-14 grid-cols-auto-1fr items-center gap-2 whitespace-nowrap border-y border-neutral px-4";
 
+  const enabledClass = clsx(
+    className,
+    "duration-300 hover:bg-neutral active:bg-primary active:text-primary-content",
+  );
+
+  const disabledClass = clsx(className, "text-neutral");
+
   return (
     <>
       {isLinkDisabled(props.link) ? (
-        <div class={clsx(className, "text-neutral")}>
+        <div class={disabledClass}>
           <ConstructionIcon />
           {props.open && <OpenedLinkText label={props.link.label} disabled />}
         </div>
+      ) : "noLink" in props.link ? (
+        <button class={clsx(enabledClass, "text-left")} onClick={onClick}>
+          <SidebarContent
+            icon={props.link.icon}
+            label={props.link.label}
+            open={props.open}
+          />
+        </button>
       ) : (
-        <Link
-          href={props.link.href}
-          onClick={onClick}
-          class={clsx(
-            className,
-            "duration-300 hover:bg-neutral active:bg-primary active:text-primary-content",
-          )}>
-          <Dynamic component={props.link.icon} />
-          {props.open && <OpenedLinkText label={props.link.label} />}
+        <Link href={props.link.href} onClick={onClick} class={enabledClass}>
+          <SidebarContent
+            icon={props.link.icon}
+            label={props.link.label}
+            open={props.open}
+          />
         </Link>
       )}
     </>

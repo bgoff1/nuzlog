@@ -1,7 +1,8 @@
 import clsx from "clsx";
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { DatabaseIcon, ThemeIcon } from "../../common/icons";
+import { useInstall } from "../../../context/install";
+import { DatabaseIcon, DownloadIcon, ThemeIcon } from "../../common/icons";
 import { SidebarLink } from "./SidebarLink";
 import { links } from "./links.data";
 
@@ -9,6 +10,8 @@ export const Sidebar: Component<{
   open: boolean;
   closeSidebar: () => void;
 }> = (props) => {
+  const { show, action } = useInstall();
+
   return (
     <nav
       class={clsx(
@@ -38,6 +41,20 @@ export const Sidebar: Component<{
         }}
         open={props.open}
       />
+      {!!show() && (
+        <SidebarLink
+          closeSidebar={() => {
+            props.closeSidebar();
+            action();
+          }}
+          open={props.open}
+          link={{
+            noLink: true,
+            icon: DownloadIcon,
+            label: "Install the app",
+          }}
+        />
+      )}
       <SidebarLink
         link={{ href: "/theme", icon: ThemeIcon, label: "Theme" }}
         open={props.open}
