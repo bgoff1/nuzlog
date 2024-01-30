@@ -44,7 +44,12 @@ module.exports = {
     ],
     "object-shorthand": "error",
     "no-shadow": "error",
-    "@typescript-eslint/consistent-type-imports": "error",
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      {
+        disallowTypeAnnotations: false,
+      },
+    ],
   },
   settings: {
     tailwindcss: {

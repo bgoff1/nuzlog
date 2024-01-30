@@ -99,6 +99,9 @@ jobs:
       - name: Build Routes
         run: pnpm routes
 
+      - name: Generate database types
+        run: pnpm db:types
+
       - name: Lint application
         run: pnpm lint
 

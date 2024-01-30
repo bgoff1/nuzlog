@@ -4,10 +4,103 @@ import daisyui from "daisyui";
 import tailwindPlugin from "tailwindcss/plugin";
 import type { Config } from "tailwindcss/types/config";
 
+export const typeColors = {
+  normal: {
+    DEFAULT: "#a8a77a",
+    alt: "#8f8e68",
+    contrast: "#000000",
+  },
+  fire: {
+    DEFAULT: "#ee8130",
+    alt: "#d4742a",
+    contrast: "#000000",
+  },
+  water: {
+    DEFAULT: "#6390f0",
+    alt: "#5880d6",
+    contrast: "#000000",
+  },
+  electric: {
+    DEFAULT: "#f7d02c",
+    alt: "#deb928",
+    contrast: "#000000",
+  },
+  grass: {
+    DEFAULT: "#7ac74c",
+    alt: "#69ad42",
+    contrast: "#000000",
+  },
+  ice: {
+    DEFAULT: "#96d9d6",
+    alt: "#84bfbc",
+    contrast: "#000000",
+  },
+  fighting: {
+    DEFAULT: "#c22e28",
+    alt: "#a82823",
+    contrast: "#ffffff",
+  },
+  poison: {
+    DEFAULT: "#a33ea1",
+    alt: "#8a3488",
+    contrast: "#ffffff",
+  },
+  ground: {
+    DEFAULT: "#e2bf65",
+    alt: "#c9aa5b",
+    contrast: "#000000",
+  },
+  flying: {
+    DEFAULT: "#a98ff3",
+    alt: "#9880d9",
+    contrast: "#000000",
+  },
+  psychic: {
+    DEFAULT: "#f95587",
+    alt: "#c7446b",
+    contrast: "#000000",
+  },
+  bug: {
+    DEFAULT: "#a6b91a",
+    alt: "#91a116",
+    contrast: "#000000",
+  },
+  rock: {
+    DEFAULT: "#b6a136",
+    alt: "#9c892f",
+    contrast: "#000000",
+  },
+  ghost: {
+    DEFAULT: "#735797",
+    alt: "#5f487d",
+    contrast: "#ffffff",
+  },
+  dragon: {
+    DEFAULT: "#6f35fc",
+    alt: "#6230e3",
+    contrast: "#ffffff",
+  },
+  dark: {
+    DEFAULT: "#705746",
+    alt: "#574337",
+    contrast: "#ffffff",
+  },
+  steel: {
+    DEFAULT: "#b7b7ce",
+    alt: "#a1a1b5",
+    contrast: "#000000",
+  },
+  fairy: {
+    DEFAULT: "#d685ad",
+    alt: "#bd7599",
+    contrast: "#000000",
+  },
+} as const;
+
 const theme: Config & { daisyui: DaisyUIConfig } = {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
-    colors: {},
+    colors: typeColors,
     extend: {
       gridTemplateColumns: {
         "auto-1fr": "auto 1fr",

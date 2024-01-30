@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import type { Component } from "solid-js";
+import { Show } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import type { IconTypes } from "../../common/icons";
 import { ConstructionIcon } from "../../common/icons";
@@ -26,7 +27,9 @@ const SidebarContent: Component<{
 }> = (props) => (
   <>
     <Dynamic component={props.icon} />
-    {props.open && <OpenedLinkText label={props.label} />}
+    <Show when={props.open}>
+      <OpenedLinkText label={props.label} />
+    </Show>
   </>
 );
 
@@ -52,7 +55,9 @@ export const SidebarLink: Component<{
       {isLinkDisabled(props.link) ? (
         <div class={disabledClass}>
           <ConstructionIcon />
-          {props.open && <OpenedLinkText label={props.link.label} disabled />}
+          <Show when={props.open}>
+            <OpenedLinkText label={props.link.label} disabled />
+          </Show>
         </div>
       ) : "noLink" in props.link ? (
         <button class={clsx(enabledClass, "text-left")} onClick={onClick}>
