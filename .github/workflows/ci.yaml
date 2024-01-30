@@ -62,6 +62,8 @@ jobs:
         run: |
           if [[ "$SAVED_SHA" != "$CURRENT_SHA" ]]; then
             echo "SHOULD_DEPLOY=true" >> $GITHUB_OUTPUT
+          elif [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
+            echo "SHOULD_DEPLOY=true" >> $GITHUB_OUTPUT
           else
             echo "SHOULD_DEPLOY=false" >> $GITHUB_OUTPUT
           fi
