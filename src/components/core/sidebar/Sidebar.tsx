@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import type { Component } from "solid-js";
-import { For } from "solid-js";
+import { For, Show } from "solid-js";
 import { useInstall } from "../../../context/install";
-import { DatabaseIcon, DownloadIcon, ThemeIcon } from "../../common/icons";
+import { DownloadIcon, ThemeIcon } from "../../common/icons";
 import { SidebarLink } from "./SidebarLink";
 import { links } from "./links.data";
 
@@ -32,16 +32,7 @@ export const Sidebar: Component<{
           )}
         </For>
       </div>
-      <SidebarLink
-        closeSidebar={props.closeSidebar}
-        link={{
-          href: "/data-management",
-          label: "Data Management",
-          icon: DatabaseIcon,
-        }}
-        open={props.open}
-      />
-      {!!show() && (
+      <Show when={show()}>
         <SidebarLink
           closeSidebar={() => {
             props.closeSidebar();
@@ -54,7 +45,7 @@ export const Sidebar: Component<{
             label: "Install the app",
           }}
         />
-      )}
+      </Show>
       <SidebarLink
         link={{ href: "/theme", icon: ThemeIcon, label: "Theme" }}
         open={props.open}

@@ -95,7 +95,7 @@ export const InstallProvider = (props: { children: JSX.Element }) => {
     },
     offlineReady,
     needRefresh,
-    refresh: () => updateServiceWorker(),
+    refresh: () => updateServiceWorker(true),
   };
 
   return (

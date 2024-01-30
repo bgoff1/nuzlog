@@ -1,11 +1,5 @@
-import { createResource } from "solid-js";
-import { fetchFunction } from "../../api/cached-fetch";
-
-const Page = () => {
-  const [data] = createResource(() =>
-    fetchFunction("/pokemon", { query: { offset: 20 } }),
-  );
-
-  return <pre class="overflow-y-auto">{JSON.stringify(data(), null, 2)}</pre>;
+const BuilderOptionsPage = () => {
+  return <h1>This is the Builder Options Page</h1>;
 };
-export default Page;
+
+export default BuilderOptionsPage;

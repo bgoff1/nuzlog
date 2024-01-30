@@ -23,7 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 
-route-tree.gen.ts
+*.gen.ts
 
 # Local Netlify folder
 .netlify
+
+public/*.db

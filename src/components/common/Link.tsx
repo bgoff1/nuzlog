@@ -30,7 +30,7 @@ const buildLinkWithParams = <TRoute extends keyof ParameterizedRoutes>(
 ) => {
   let newLink = url.toString();
   for (const [key, value] of Object.entries(params ?? {})) {
-    newLink = newLink.replace(`:${key}`, value);
+    newLink = newLink.replace(`:${key}`, value as string);
   }
 
   return newLink;
