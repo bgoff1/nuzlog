@@ -47,21 +47,15 @@ jobs:
           echo "CURRENT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
       - name: Build sqlite3 database
-        env:
-          UPSTASH_URL: ${{ secrets.UPSTASH_URL }}
-          UPSTASH_TOKEN: ${{ secrets.UPSTASH_TOKEN }}
         run: |
-          if [[ "$SAVED_SHA" != "$CURRENT_SHA" ]]; then
-            cd pokeapi
-            
-            pip install -r requirements.txt
-            python manage.py migrate --settings=config.local
-            echo "from data.v2.build import build_all; build_all()" | python manage.py shell --settings=config.local
+          cd pokeapi
 
-            cd ..
+          pip install -r requirements.txt
+          python manage.py migrate --settings=config.local
 
-            cp pokeapi/db.sqlite3 public/pokemon.db
-          fi
+          cd ..
+
+          cp pokeapi/db.sqlite3 public/pokemon.db
 
       - name: Environment variables to output
         id: env
@@ -110,6 +104,12 @@ jobs:
 
       - name: Build application
         run: pnpm build
+
+      - name: Build DB data
+        if: steps.env.outputs.SHOULD_DEPLOY == 'true'
+        run: |
+          cd pokeapi
+          echo "from data.v2.build import build_all; build_all()" | python manage.py shell --settings=config.local
 
       - name: Deploy to netlify
         if: steps.env.outputs.SHOULD_DEPLOY == 'true'
