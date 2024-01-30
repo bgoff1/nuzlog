@@ -1,6 +1,7 @@
 import type { PokemonSprites } from "@bgoff1/pokeapi-types";
 import clsx from "clsx";
 import { For, Show, createMemo } from "solid-js";
+import { LoadingGrid } from "../../components/team-builder/loading-grid";
 import { useBuilderData } from "../../hooks/team-builder/builder";
 import {
   bgMapping,
@@ -29,7 +30,7 @@ const BuilderPage = () => {
   return (
     <>
       <h1>This is the Builder Page</h1>
-      <Show when={!data.loading} fallback="loading...">
+      <Show when={!data.loading} fallback={<LoadingGrid />}>
         <ul class="flex flex-wrap justify-center gap-4">
           <For each={pokemon()}>
             {({ types, name, sprite }) => {

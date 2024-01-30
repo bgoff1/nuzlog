@@ -1,45 +1,45 @@
-import type { OpfsDatabase, SqlValue } from "@sqlite.org/sqlite-wasm";
-import sqlite3InitModule from "@sqlite.org/sqlite-wasm";
 import { expose } from "comlink";
 import type { CompiledQuery } from "kysely";
+import type { Database, SqlValue } from "sql.js";
+import initSqlJs from "sql.js";
+import sqlJsWasmURL from "sql.js/dist/sql-wasm.wasm?url";
 
-const DATABASE_NAME = "/pokemon.db";
-const READ = "r";
-
-let db: OpfsDatabase;
-
-let Database: typeof OpfsDatabase;
-
-const openDatabase = () => {
-  db = new Database(DATABASE_NAME, READ);
-};
+let db: Database;
 
 function query<T>(compiledQuery: CompiledQuery<T>): T[] {
-  openDatabase();
   console.log(compiledQuery.sql, compiledQuery.parameters);
-  const result: T[] = db.exec({
-    sql: compiledQuery.sql,
-    bind: compiledQuery.parameters as SqlValue[],
-    returnValue: "resultRows",
-    rowMode: "object",
-  }) as T[];
-  db.close();
-  return result;
+
+  const [{ columns, values }] = db.exec(
+    compiledQuery.sql,
+    compiledQuery.parameters as SqlValue[],
+  );
+
+  return values.map((row) =>
+    columns.reduce(
+      (previous, current, index) => ({
+        ...previous,
+        [current]: row[index],
+      }),
+      {} as T,
+    ),
+  );
 }
 
 export const workerObject = {
   query,
   load: async () => {
     try {
-      const sqlite3 = await sqlite3InitModule({
-        print: console.log,
-        printErr: console.error,
-      });
-      const response = await fetch("/pokemon.db");
-      const buffer = await response.arrayBuffer();
-      await sqlite3.oo1.OpfsDb.importDb(DATABASE_NAME, buffer);
+      const wasmResponse = await fetch(sqlJsWasmURL);
 
-      Database = sqlite3.oo1.OpfsDb;
+      const sqlPromise = initSqlJs({
+        wasmBinary: await wasmResponse.arrayBuffer(),
+      });
+
+      const dataPromise = fetch("/pokemon.db").then((res) => res.arrayBuffer());
+
+      const [SQL, buf] = await Promise.all([sqlPromise, dataPromise]);
+
+      db = new SQL.Database(new Uint8Array(buf));
     } catch (err) {
       const error = err as Error;
       console.error(error.name, error.message);
