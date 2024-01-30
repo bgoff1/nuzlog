@@ -8,6 +8,13 @@ from = "/*"
 to = "/index.html"
 status = 200
 
+[[headers]]
+for = "/*"
+[headers.values]
+Cross-Origin-Opener-Policy = "same-origin"
+Cross-Origin-Embedder-Policy = "require-corp"
+
+
 ## (optional) Settings for Netlify Dev
 ## https://github.com/netlify/cli/blob/main/docs/netlify-dev.md#project-detection
 # [dev]
