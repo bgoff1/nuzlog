@@ -1,5 +1,5 @@
 import { Show, createResource, type Component } from "solid-js";
-import { loadDB } from "../database";
+import { loadDB } from "../database/load";
 import type { WithChildren } from "../types/with-children";
 
 export const DatabaseProvider: Component<WithChildren> = (props) => {

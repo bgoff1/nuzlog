@@ -1,5 +1,6 @@
 import { createResource } from "solid-js";
-import { query, queryBuilder } from "../../database";
+import { query } from "../../database/query";
+import { queryBuilder } from "../../database/query-builder";
 
 export const useTypes = () => {
   const [types] = createResource(

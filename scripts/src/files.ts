@@ -8,7 +8,8 @@ export const filterFiles = async (filesOrDirectories: string[]) => {
     const stats = await fs.stat(
       path.resolve(ROUTES_DIRECTORY, fileOrDirectory),
     );
-    if (!stats.isDirectory()) {
+
+    if (!stats.isDirectory() && !fileOrDirectory.match(/.(spec|test).tsx/)) {
       results.push("/" + fileOrDirectory);
     }
   }

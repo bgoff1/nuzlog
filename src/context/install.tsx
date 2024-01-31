@@ -1,11 +1,12 @@
+import type { Component } from "solid-js";
 import {
   createEffect,
   createSignal,
   type Accessor,
-  type JSX,
   type Setter,
 } from "solid-js";
 import { useRegisterSW } from "virtual:pwa-register/solid";
+import type { WithChildren } from "../types/with-children";
 import { createContext, useContext } from "./context-helpers";
 
 /**
@@ -14,7 +15,7 @@ import { createContext, useContext } from "./context-helpers";
  *
  * @note Only supported on Chrome and Android Webview.
  */
-interface BeforeInstallPromptEvent extends Event {
+export interface BeforeInstallPromptEvent extends Event {
   /**
    * Returns an array of DOMString items containing the platforms on which the event was dispatched.
    * This is provided for user agents that want to present a choice of versions to the user such as,
@@ -53,7 +54,7 @@ export const ShowInstallContext =
 
 export const useInstall = () => useContext(ShowInstallContext);
 
-export const InstallProvider = (props: { children: JSX.Element }) => {
+export const InstallProvider: Component<WithChildren> = (props) => {
   const [prompt, setPrompt] = createSignal<BeforeInstallPromptEvent>();
   const [showInstall, setShowInstall] = createSignal(false);
 
@@ -87,11 +88,13 @@ export const InstallProvider = (props: { children: JSX.Element }) => {
     show: showInstall,
     action: () => {
       const promptValue = prompt();
-      if (promptValue) {
+      if (promptValue?.prompt) {
         return promptValue.prompt();
-      } else {
-        throw new Error("prompt is not supported");
       }
+      return Promise.resolve({
+        outcome: "dismissed",
+        platform: "",
+      });
     },
     offlineReady,
     needRefresh,

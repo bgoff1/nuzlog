@@ -3,7 +3,8 @@ import { sql } from "kysely";
 import type { Accessor } from "solid-js";
 import { createResource } from "solid-js";
 import type { Filter } from "../../context/team-builder/team-reducer";
-import { query, queryBuilder } from "../../database";
+import { query } from "../../database/query";
+import { queryBuilder } from "../../database/query-builder";
 import type { PokemonType } from "../../types/pokemon-types";
 
 const getBaseQuery = () =>
@@ -132,7 +133,7 @@ const getFormattedPokemon = async (filters: Filter[]) => {
       return {
         id: each.id,
         name: each.name,
-        sprite: sprites.front_default as string,
+        sprite: sprites.front_default!,
         typeIds,
         types,
       };

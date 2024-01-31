@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { Link } from "../components/common/Link";
+import { Link } from "../components/common/link";
 import type { NonParameterizedRoutes } from "../route-tree.gen";
 
 const HomePage: Component = () => {

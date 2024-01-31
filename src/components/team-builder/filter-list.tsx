@@ -1,8 +1,8 @@
 import type { JSX } from "solid-js";
 import { For } from "solid-js";
 import type { ListItem } from "../../types/list-item";
-import Checkbox from "../common/Checkbox";
-import Collapse from "../common/Collapse";
+import { Checkbox } from "../common/checkbox";
+import { Collapse } from "../common/collapse";
 
 type FilterListProps<T> = {
   title: string;
@@ -25,7 +25,7 @@ const CollapseTitle = <T,>(
           ? `${props.title} (${filtersEnabled()})`
           : props.title}
       </span>
-      <span class="">{props.subtitle}</span>
+      <span>{props.subtitle}</span>
     </div>
   );
 };
@@ -51,7 +51,7 @@ const CollapseContent = <T,>(
   </>
 );
 
-const FilterList = <T,>(props: FilterListProps<T>): JSX.Element => {
+export const FilterList = <T,>(props: FilterListProps<T>): JSX.Element => {
   return (
     <Collapse
       title={
@@ -71,5 +71,3 @@ const FilterList = <T,>(props: FilterListProps<T>): JSX.Element => {
     />
   );
 };
-
-export default FilterList;

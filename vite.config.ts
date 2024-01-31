@@ -5,7 +5,7 @@ import solid from "vite-plugin-solid";
 
 const pwaOptions: Partial<VitePWAOptions> = {
   srcDir: "src",
-  filename: "sw.ts",
+  filename: "worker/instances/service-worker.ts",
   strategies: "injectManifest",
   manifest: {
     name: "Nuzlog PWA",
@@ -58,7 +58,37 @@ export default defineConfig({
   server: {
     port: 3000,
   },
-  optimizeDeps: {
-    exclude: ["@sqlite.org/sqlite-wasm"],
+  test: {
+    globals: true,
+    testTransformMode: { web: ["*.ts", "*.tsx"] },
+    setupFiles: ["./src/test-setup.tsx"],
+    deps: {
+      optimizer: {
+        web: {
+          enabled: true,
+          exclude: ["solid-js"],
+        },
+      },
+    },
+    coverage: {
+      provider: "v8",
+      enabled: true,
+      exclude: [
+        "**/*.config.js",
+        "**/*.config.ts",
+        "**/*.gen.ts",
+        "**/*.d.ts",
+        "**/.eslintrc.cjs",
+        "scripts/",
+        "src/index.tsx",
+        "src/worker/instances/*.ts",
+        "src/database/query-builder.ts",
+        "**/_layout.tsx",
+        "src/pages/**/*.tsx",
+      ],
+      thresholds: {
+        "100": true,
+      },
+    },
   },
 });

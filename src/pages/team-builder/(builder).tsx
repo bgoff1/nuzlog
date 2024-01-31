@@ -3,7 +3,7 @@ import { For, Show, createMemo } from "solid-js";
 import { LoadingGrid } from "../../components/team-builder/loading-grid";
 import { useTeam } from "../../context/team-builder/team";
 import type { useBuilderData } from "../../hooks/team-builder/builder";
-import { bgMapping, getBorderColor } from "../../types/pokemon-types";
+import { getBackgroundColor, getBorderColor } from "../../types/pokemon-types";
 import { MAX_TEAM_SIZE } from "../../util/constants";
 
 const Pokemon = (
@@ -11,7 +11,7 @@ const Pokemon = (
     onClick: () => void;
   },
 ) => {
-  const background = () => bgMapping[props.types[0]];
+  const background = () => getBackgroundColor(props.types);
   const borderColor = () => getBorderColor(props.types);
 
   return (

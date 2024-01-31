@@ -4,7 +4,7 @@ import { Show } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import type { IconTypes } from "../../common/icons";
 import { ConstructionIcon } from "../../common/icons";
-import { Link } from "../../common/Link";
+import { Link } from "../../common/link";
 import type { EnabledLinkItem } from "./links.data";
 import { isLinkDisabled, type LinkItem } from "./links.data";
 
