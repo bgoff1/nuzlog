@@ -1,1 +1,5 @@
 @import "./tailwind.css";
+
+html:not([data-theme="latte"]) {
+  color-scheme: dark;
+}

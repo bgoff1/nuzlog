@@ -1,3 +1,4 @@
+import type { CatppuccinFlavor } from "@catppuccin/palette";
 import { flavors } from "@catppuccin/palette";
 import type { Config as DaisyUIConfig } from "daisyui";
 import daisyui from "daisyui";
@@ -97,6 +98,15 @@ export const typeColors = {
   },
 } as const;
 
+const buildCssVariables = (colorSet: CatppuccinFlavor) =>
+  colorSet.colorEntries.reduce(
+    (previous, [color, details]) => ({
+      ...previous,
+      [`--${color}`]: details.hex,
+    }),
+    {},
+  );
+
 const theme: Config & { daisyui: DaisyUIConfig } = {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
@@ -135,22 +145,50 @@ const theme: Config & { daisyui: DaisyUIConfig } = {
         ".grid-layout-main": {
           gridTemplateAreas: "'header header' 'sidebar main' 'sidebar footer'",
         },
-        ...["header", "sidebar", "footer"].reduce((prev, curr) => {
+        ...["header", "sidebar", "footer"].reduce((agg, area) => {
           return {
-            ...prev,
-            [`.${curr}-area`]: {
-              gridArea: curr,
+            ...agg,
+            [`.${area}-area`]: {
+              gridArea: area,
             },
           };
         }, {}),
         main: {
           gridArea: "main",
         },
-        ".main-padding": {
-          padding: "0.75rem",
-        },
-        ".progress[value]": {
-          transition: "width 0.5s",
+      });
+
+      plugin.addComponents({
+        ".custom-loader": {
+          "@keyframes gradient-loader": {
+            "0%": {
+              "background-position": "50% 50%",
+            },
+            "33%": {
+              "background-position": "100% 50%",
+            },
+            "66%": {
+              "background-position": "0% 50%",
+            },
+            "100%": {
+              "background-position": "50% 50%",
+            },
+          },
+          animation: "gradient-loader 5s ease infinite",
+          "background-image": `linear-gradient(-45deg, ${[
+            "crust",
+            "mantle",
+            "base",
+            "surface0",
+            "surface1",
+            "surface0",
+            "base",
+            "mantle",
+            "crust",
+          ]
+            .map((x) => `var(--${x})`)
+            .join(", ")})`,
+          "background-size": "400% 400%",
         },
       });
     }),
@@ -170,6 +208,7 @@ const theme: Config & { daisyui: DaisyUIConfig } = {
           success: flavors.mocha.colors.green.hex,
           warning: flavors.mocha.colors.peach.hex,
           error: flavors.mocha.colors.red.hex,
+          ...buildCssVariables(flavors.mocha),
         },
       },
       {
@@ -183,6 +222,7 @@ const theme: Config & { daisyui: DaisyUIConfig } = {
           success: flavors.macchiato.colors.green.hex,
           warning: flavors.macchiato.colors.peach.hex,
           error: flavors.macchiato.colors.red.hex,
+          ...buildCssVariables(flavors.macchiato),
         },
       },
       {
@@ -196,6 +236,7 @@ const theme: Config & { daisyui: DaisyUIConfig } = {
           success: flavors.frappe.colors.green.hex,
           warning: flavors.frappe.colors.peach.hex,
           error: flavors.frappe.colors.red.hex,
+          ...buildCssVariables(flavors.frappe),
         },
       },
       {
@@ -211,6 +252,7 @@ const theme: Config & { daisyui: DaisyUIConfig } = {
           success: flavors.latte.colors.green.hex,
           warning: flavors.latte.colors.peach.hex,
           error: flavors.latte.colors.red.hex,
+          ...buildCssVariables(flavors.latte),
         },
       },
     ],

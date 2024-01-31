@@ -66,6 +66,8 @@ jobs:
 
           cp pokeapi/db.sqlite3 public/pokemon.db
 
+          rm -rf pokeapi
+
       - name: Build Routes
         run: pnpm routes
 
@@ -74,6 +76,9 @@ jobs:
 
       - name: Lint application
         run: pnpm lint
+
+      - name: Check formatting
+        run: pnpm format:check
 
       - name: Build application
         run: pnpm build

@@ -16,3 +16,16 @@ export const queryBuilder = new Kysely<DB>({
     createQueryCompiler: () => new SqliteQueryCompiler(),
   },
 });
+
+import { wrap } from "comlink";
+import type { CompiledQuery } from "kysely";
+
+// worker instance
+const db = wrap<(typeof import("../worker/worker"))["workerObject"]>(
+  new Worker(new URL("../worker/worker", import.meta.url), { type: "module" }),
+);
+
+export const query = <T>(compiledQuery: CompiledQuery<T>): Promise<T[]> =>
+  db.query(compiledQuery) as Promise<T[]>;
+
+export const loadDB = () => db.load();
