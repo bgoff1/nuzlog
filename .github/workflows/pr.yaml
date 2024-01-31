@@ -66,6 +66,8 @@ jobs:
 
           cp pokeapi/db.sqlite3 public/pokemon.db
 
+          rm -rf pokeapi
+
       - name: Build Routes
         run: pnpm routes
 
