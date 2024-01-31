@@ -1,5 +1,4 @@
-import type { JSX } from "solid-js";
-
+/* v8 ignore next 3 */
 export type WithChildren<T = unknown> = T & {
-  children: JSX.Element;
+  children: import("solid-js").JSX.Element;
 };

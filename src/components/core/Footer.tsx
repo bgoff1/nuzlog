@@ -2,7 +2,7 @@ import { useMatch } from "@solidjs/router";
 import clsx from "clsx";
 import { For } from "solid-js";
 import { Dynamic } from "solid-js/web";
-import { Link } from "../common/Link";
+import { Link } from "../common/link";
 import { isLinkDisabled, type LinkItem } from "./sidebar/links.data";
 
 const FooterButton = (props: LinkItem) => {

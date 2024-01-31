@@ -6,7 +6,7 @@ interface CollapseProps {
   content: JSX.Element;
 }
 
-const Collapse: Component<CollapseProps> = (props) => {
+export const Collapse: Component<CollapseProps> = (props) => {
   const [open, setOpen] = createSignal(false);
 
   return (
@@ -19,5 +19,3 @@ const Collapse: Component<CollapseProps> = (props) => {
     </details>
   );
 };
-
-export default Collapse;

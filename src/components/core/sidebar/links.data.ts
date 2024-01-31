@@ -28,6 +28,3 @@ export const links: LinkItem[] = [
 export const isLinkDisabled = (
   link: Partial<LinkItem>,
 ): link is DisabledLinkItem => (link as DisabledLinkItem).disabled === true;
-
-export const isFullLink = (link: Partial<LinkItem>): link is LinkItem =>
-  link.href !== undefined;

@@ -1,4 +1,4 @@
-import { Link } from "../components/common/Link";
+import { Link } from "../components/common/link";
 
 const Fallback = () => {
   return (

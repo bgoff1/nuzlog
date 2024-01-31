@@ -6,7 +6,7 @@ type CheckboxProps = {
   onChange: () => void;
 };
 
-const Checkbox: Component<CheckboxProps> = (props) => {
+export const Checkbox: Component<CheckboxProps> = (props) => {
   return (
     <div class="form-control">
       <label class="label cursor-pointer gap-x-2">
@@ -23,5 +23,3 @@ const Checkbox: Component<CheckboxProps> = (props) => {
     </div>
   );
 };
-
-export default Checkbox;

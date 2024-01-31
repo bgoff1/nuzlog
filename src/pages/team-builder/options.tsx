@@ -1,5 +1,5 @@
-import Checkbox from "../../components/common/Checkbox";
-import FilterList from "../../components/team-builder/filter-list";
+import { Checkbox } from "../../components/common/checkbox";
+import { FilterList } from "../../components/team-builder/filter-list";
 import { useTeam } from "../../context/team-builder/team";
 import { useGenerations, useTypes } from "../../hooks/team-builder/options";
 import type { ListItem } from "../../types/list-item";

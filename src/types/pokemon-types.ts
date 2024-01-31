@@ -21,7 +21,11 @@ export const typeColors = [
 
 export type PokemonType = (typeof typeColors)[number];
 
-export const bgMapping: Record<PokemonType, `bg-${PokemonType}`> = {
+type Background = `bg-${PokemonType}`;
+type Border = `border-${PokemonType}`;
+type AlternateBorder = `${Border}-alt`;
+
+export const bgMapping: Record<PokemonType, Background> = {
   bug: "bg-bug",
   dark: "bg-dark",
   dragon: "bg-dragon",
@@ -41,9 +45,6 @@ export const bgMapping: Record<PokemonType, `bg-${PokemonType}`> = {
   steel: "bg-steel",
   water: "bg-water",
 };
-
-type Border = `border-${PokemonType}`;
-type AlternateBorder = `${Border}-alt`;
 
 export const borderMapping: Record<PokemonType, Border> = {
   bug: "border-bug",
@@ -95,3 +96,6 @@ export const getBorderColor = (
   }
   return borderMapping[types[1]];
 };
+
+export const getBackgroundColor = (types: PokemonType[]): Background =>
+  bgMapping[types[0]];

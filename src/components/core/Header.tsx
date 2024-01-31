@@ -5,8 +5,8 @@ import { useInstall } from "../../context/install";
 import { useTheme } from "../../context/theme";
 import type { NonParameterizedRoutes } from "../../route-tree.gen";
 import type { Theme } from "../../util/themes";
-import { Link } from "../common/Link";
 import { HamburgerIcon, MoonIcon, RefreshIcon, SunIcon } from "../common/icons";
+import { Link } from "../common/link";
 
 export const Header: Component<{
   toggle: () => void;
