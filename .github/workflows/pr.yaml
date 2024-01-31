@@ -75,6 +75,9 @@ jobs:
       - name: Lint application
         run: pnpm lint
 
+      - name: Check formatting
+        run: pnpm format:check
+
       - name: Build application
         run: pnpm build
 

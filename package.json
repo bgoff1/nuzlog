@@ -8,6 +8,7 @@
     "db:types": "kysely-codegen --dialect sqlite --url public/pokemon.db --out-file src/database/types.gen.ts",
     "deploy:netlify": "netlify deploy --prod",
     "dev": "vite",
+    "format:check": "prettier . --check",
     "lint": "eslint src",
     "prepare": "husky install",
     "preview": "vite preview",
