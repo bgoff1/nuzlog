@@ -133,7 +133,7 @@ const getFormattedPokemon = async (filters: Filter[]) => {
       return {
         id: each.id,
         name: each.name,
-        sprite: sprites.front_default,
+        sprite: sprites.front_default!,
         typeIds,
         types,
       };

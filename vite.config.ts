@@ -72,6 +72,7 @@ export default defineConfig({
     },
     coverage: {
       provider: "v8",
+      enabled: true,
       exclude: [
         "**/*.config.js",
         "**/*.config.ts",

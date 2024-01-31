@@ -84,7 +84,7 @@ jobs:
         run: pnpm build
 
       - name: Test application
-        run: pnpm vitest run --coverage
+        run: pnpm test
 
       - name: Validate PR title with commitlint
         uses: kevintyj/prlint@v1
