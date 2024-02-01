@@ -23,9 +23,9 @@ describe("Coverage", () => {
 
     const { result } = renderHook(useEffectiveness);
 
-    await waitFor(() => expect(result().size).not.toEqual(0));
+    await waitFor(() => expect(result.data!.size).not.toEqual(0));
 
-    expect(result().get("fire vs normal")).toEqual(1);
-    expect(result().get("water vs fire")).toEqual(2);
+    expect(result.data!.get("fire vs normal")).toEqual(1);
+    expect(result.data!.get("water vs fire")).toEqual(2);
   });
 });

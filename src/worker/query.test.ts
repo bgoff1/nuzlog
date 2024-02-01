@@ -1,8 +1,15 @@
 import type { CompiledQuery, RootOperationNode } from "kysely";
 import type { Database } from "sql.js";
+import type { Mock } from "vitest";
 import { databaseQuery } from "./query";
 
 type MockedDB = ReturnType<typeof vi.mocked<Database>>;
+
+type Env = ReturnType<(typeof import("../env"))["env"]>;
+
+const env: Mock<[], Env> = vi.hoisted(() => vi.fn());
+
+vi.mock("../env", () => ({ env }));
 
 describe("Query Database", () => {
   const mockQuery = {
@@ -33,7 +40,7 @@ describe("Query Database", () => {
   });
 
   it("should query db", () => {
-    import.meta.env.VITE_DEBUG_QUERY = false;
+    env.mockReturnValue({ debugQuery: false } as Env);
     expect(databaseQuery(mockQuery, mockDB)).toEqual([
       {
         id: 1,
@@ -53,7 +60,7 @@ describe("Query Database", () => {
   });
 
   it("should debug query if wanted", () => {
-    import.meta.env.VITE_DEBUG_QUERY = "true";
+    env.mockReturnValue({ debugQuery: true } as Env);
 
     databaseQuery(mockQuery, mockDB);
 
@@ -76,7 +83,7 @@ describe("Query Database", () => {
   });
 
   it("should debug with strings", () => {
-    import.meta.env.VITE_DEBUG_QUERY = "true";
+    env.mockReturnValue({ debugQuery: true } as Env);
 
     databaseQuery(
       {
