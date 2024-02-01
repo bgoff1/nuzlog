@@ -1,5 +1,6 @@
 import type { JSX } from "solid-js";
 import { createSignal } from "solid-js";
+import { Toaster } from "solid-toast";
 import { Header } from "../components/core/Header";
 import { Sidebar } from "../components/core/sidebar/Sidebar";
 import { DatabaseProvider } from "../context/database";
@@ -18,6 +19,13 @@ const Layout = (props: { children?: JSX.Element }) => {
         <Sidebar closeSidebar={close} open={open()} />
         <DatabaseProvider>{props.children}</DatabaseProvider>
       </InstallProvider>
+      <Toaster
+        position="bottom-center"
+        toastOptions={{
+          className:
+            "border-2 border-base-100 !bg-neutral !text-neutral-content",
+        }}
+      />
     </ThemeProvider>
   );
 };

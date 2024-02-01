@@ -1,17 +1,15 @@
 import { useMatch } from "@solidjs/router";
 import clsx from "clsx";
 import { Show, type Component } from "solid-js";
-import { useInstall } from "../../context/install";
 import { useTheme } from "../../context/theme";
 import type { NonParameterizedRoutes } from "../../route-tree.gen";
 import type { Theme } from "../../util/themes";
-import { HamburgerIcon, MoonIcon, RefreshIcon, SunIcon } from "../common/icons";
+import { HamburgerIcon, MoonIcon, SunIcon } from "../common/icons";
 import { Link } from "../common/link";
 
 export const Header: Component<{
   toggle: () => void;
 }> = (props) => {
-  const { needRefresh, refresh } = useInstall();
   const { theme, update } = useTheme();
   const setThemeTo = (newTheme: Theme) => update(newTheme);
   const match = useMatch((): NonParameterizedRoutes => "/theme");
@@ -26,6 +24,7 @@ export const Header: Component<{
           Nuzlog
         </Link>
       </div>
+
       <Show when={!match()}>
         <button
           class={clsx(
@@ -35,13 +34,6 @@ export const Header: Component<{
           onClick={() => setThemeTo(theme() === "latte" ? "mocha" : "latte")}>
           <MoonIcon class="swap-on" />
           <SunIcon class="swap-off" />
-        </button>
-      </Show>
-
-      <Show when={needRefresh()}>
-        <button class="btn btn-ghost" onClick={() => refresh()}>
-          <span>A new version is available!</span>
-          <RefreshIcon />
         </button>
       </Show>
     </header>

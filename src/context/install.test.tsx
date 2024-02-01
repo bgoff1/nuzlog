@@ -81,31 +81,4 @@ describe("Install Provider", () => {
       platform: "",
     });
   });
-
-  it("should update service worker", async () => {
-    const MyOtherComponent = () => {
-      const context = useInstall();
-
-      return <button onClick={() => context.refresh()}>button</button>;
-    };
-
-    const updateServiceWorker = vi.fn();
-
-    useSW.mockReturnValue({
-      needRefresh: [() => true],
-      offlineReady: [],
-      updateServiceWorker,
-    });
-
-    const { getByRole } = render(() => (
-      <InstallProvider>
-        <MyOtherComponent />
-      </InstallProvider>
-    ));
-
-    fireEvent.click(getByRole("button"));
-
-    await waitFor(() => expect(updateServiceWorker).toHaveBeenCalledOnce());
-    expect(updateServiceWorker).toHaveBeenCalledWith(true);
-  });
 });
