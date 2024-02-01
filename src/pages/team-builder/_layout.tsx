@@ -1,5 +1,9 @@
 import type { JSX } from "solid-js";
-import { PokeballIcon } from "../../components/common/icons";
+import {
+  CoverageIcon,
+  PokeballIcon,
+  SettingsIcon,
+} from "../../components/common/icons";
 import { Footer } from "../../components/core/Footer";
 import { TeamProvider } from "../../context/team-builder/team";
 
@@ -10,14 +14,19 @@ const TeamBuilderLayout = (props: { children?: JSX.Element }) => {
       <Footer
         items={[
           {
+            href: "/team-builder/options",
+            label: "Options",
+            icon: SettingsIcon,
+          },
+          {
             href: "/team-builder",
             icon: PokeballIcon,
             label: "Builder",
           },
           {
-            href: "/team-builder/options",
-            label: "Options",
-            icon: PokeballIcon,
+            href: "/team-builder/coverage",
+            label: "Coverage",
+            icon: CoverageIcon,
           },
         ]}
       />

@@ -1,54 +1,18 @@
-import clsx from "clsx";
-import { For, Show, createMemo } from "solid-js";
+import { For, Show } from "solid-js";
+import { EmptyPokemon, Pokemon } from "../../components/common/pokemon";
 import { LoadingGrid } from "../../components/team-builder/loading-grid";
 import { useTeam } from "../../context/team-builder/team";
-import type { useBuilderData } from "../../hooks/team-builder/builder";
-import { getBackgroundColor, getBorderColor } from "../../types/pokemon-types";
 import { MAX_TEAM_SIZE } from "../../util/constants";
-
-const Pokemon = (
-  props: ReturnType<ReturnType<typeof useBuilderData>>[number] & {
-    onClick: () => void;
-  },
-) => {
-  const background = () => getBackgroundColor(props.types);
-  const borderColor = () => getBorderColor(props.types);
-
-  return (
-    <button class="text-center" onClick={() => props.onClick()}>
-      <img
-        loading="lazy"
-        width={96}
-        height={96}
-        src={props.sprite}
-        alt={props.name}
-        class={clsx(
-          background(),
-          borderColor(),
-          "h-24 w-24 rounded-full border-4",
-        )}
-      />
-      <div>{props.name}</div>
-    </button>
-  );
-};
-
-const EmptyPokemon = () => (
-  <div class="text-center">
-    <div class="h-24 w-24 rounded-full bg-neutral" />
-    <div class="invisible">loading...</div>
-  </div>
-);
 
 const BuilderPage = () => {
   const { dispatcher, members, data } = useTeam();
 
-  const membersWithEmpties = createMemo(() => {
+  const membersWithEmpties = () => {
     const team = members().map((member) => ({
       ...member,
       empty: false,
     }));
-    while (team.length !== MAX_TEAM_SIZE) {
+    while (team.length < MAX_TEAM_SIZE) {
       team.push({
         id: -1,
         name: "",
@@ -59,16 +23,16 @@ const BuilderPage = () => {
     }
 
     return team;
-  });
+  };
 
-  const gridMembers = createMemo(() => {
+  const gridMembers = () => {
     return data().filter(
       (pokemon) =>
         !members()
           .map((member) => member.id)
           .includes(pokemon.id),
     );
-  });
+  };
 
   return (
     <>

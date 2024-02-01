@@ -72,7 +72,10 @@ jobs:
           echo "from data.v2.build import build_all; build_all()" | python manage.py shell --settings=config.local
 
       - name: Copy database file
-        run: cp pokeapi/db.sqlite3 public/pokemon.db
+        run: |
+          cp pokeapi/db.sqlite3 public/pokemon.db
+
+          rm -rf pokeapi
 
       - name: Use Node.js from package.json
         uses: actions/setup-node@v3
