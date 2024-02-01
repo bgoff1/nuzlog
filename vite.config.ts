@@ -5,7 +5,7 @@ import solid from "vite-plugin-solid";
 
 const pwaOptions: Partial<VitePWAOptions> = {
   srcDir: "src",
-  filename: "worker/instances/service-worker.ts",
+  filename: "sw.ts",
   strategies: "injectManifest",
   manifest: {
     name: "Nuzlog PWA",
@@ -74,16 +74,12 @@ export default defineConfig({
       provider: "v8",
       enabled: true,
       exclude: [
-        "**/*.config.js",
-        "**/*.config.ts",
-        "**/*.gen.ts",
-        "**/*.d.ts",
-        "**/.eslintrc.cjs",
+        "**/*.{config,gen,d}.{js,ts}",
+        "**/.*rc.cjs",
         "scripts/",
-        "src/index.tsx",
+        "src/{index,sw}.{ts,tsx}",
         "src/worker/instances/*.ts",
         "src/database/query-builder.ts",
-        "**/_layout.tsx",
         "src/pages/**/*.tsx",
       ],
       thresholds: {
