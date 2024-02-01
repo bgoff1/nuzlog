@@ -14,12 +14,6 @@ vi.mock("../common/link", () => ({
   ),
 }));
 
-const install = vi.hoisted(() => vi.fn());
-
-vi.mock("../../context/install", () => ({
-  useInstall: install,
-}));
-
 const theme = vi.hoisted(() => vi.fn());
 
 vi.mock("../../context/theme", () => ({
@@ -36,7 +30,6 @@ vi.mock("../common/icons", () => ({
 describe("Header", () => {
   it("should toggle hamburger menu", () => {
     match.mockReturnValue(true);
-    install.mockReturnValue({ needRefresh: () => false, refresh: () => {} });
     const updateTheme = vi.fn();
     theme.mockReturnValue({ theme: () => "mocha", update: updateTheme });
 
@@ -50,7 +43,6 @@ describe("Header", () => {
 
   it("should click the theme switcher", async () => {
     match.mockReturnValue(false);
-    install.mockReturnValue({ needRefresh: () => false, refresh: () => {} });
 
     const [currentTheme, updateTheme] = createSignal("latte");
     theme.mockReturnValue({
@@ -72,20 +64,5 @@ describe("Header", () => {
     fireEvent.click(getSwapButton());
 
     return waitFor(() => expect(getSwapButton()).toHaveClass("swap-active"));
-  });
-
-  it("should show refresh button", () => {
-    match.mockReturnValue(true);
-    const refresh = vi.fn();
-    install.mockReturnValue({ needRefresh: () => true, refresh });
-
-    const toggle = vi.fn();
-    const { getAllByRole } = render(() => <Header toggle={toggle} />);
-
-    const getInstallButton = () => getAllByRole("button")[1];
-
-    fireEvent.click(getInstallButton());
-
-    expect(refresh).toHaveBeenCalledOnce();
   });
 });

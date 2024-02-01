@@ -1,10 +1,6 @@
 import type { Component } from "solid-js";
-import {
-  createEffect,
-  createSignal,
-  type Accessor,
-  type Setter,
-} from "solid-js";
+import { createEffect, createSignal, type Accessor } from "solid-js";
+import toast from "solid-toast";
 import { useRegisterSW } from "virtual:pwa-register/solid";
 import type { WithChildren } from "../types/with-children";
 import { createContext, useContext } from "./context-helpers";
@@ -44,9 +40,6 @@ type UserChoice = {
 export type ShowInstallContext = {
   show: Accessor<boolean>;
   action: () => Promise<UserChoice>;
-  offlineReady: [Accessor<boolean>, Setter<boolean>];
-  needRefresh: Accessor<boolean>;
-  refresh: () => Promise<void>;
 };
 
 export const ShowInstallContext =
@@ -78,11 +71,12 @@ export const InstallProvider: Component<WithChildren> = (props) => {
       window.removeEventListener("beforeinstallprompt", beforeInstallListener);
   });
 
-  const {
-    needRefresh: [needRefresh],
-    offlineReady,
-    updateServiceWorker,
-  } = useRegisterSW();
+  useRegisterSW({
+    immediate: true,
+    onOfflineReady: () => {
+      toast.success("App is available offline!");
+    },
+  });
 
   const contextValue: ShowInstallContext = {
     show: showInstall,
@@ -96,9 +90,6 @@ export const InstallProvider: Component<WithChildren> = (props) => {
         platform: "",
       });
     },
-    offlineReady,
-    needRefresh,
-    refresh: () => updateServiceWorker(true),
   };
 
   return (

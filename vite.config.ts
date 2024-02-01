@@ -44,7 +44,7 @@ const pwaOptions: Partial<VitePWAOptions> = {
   injectManifest: {
     globPatterns: ["**/*.{js,css,html,svg,png}"],
   },
-
+  registerType: "autoUpdate",
   devOptions: {
     navigateFallback: "index.html",
   },

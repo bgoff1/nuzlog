@@ -8,6 +8,11 @@ vi.mock("virtual:pwa-register/solid", () => ({
   useRegisterSW: useSW,
 }));
 
+const toast = vi.hoisted(() => vi.fn());
+vi.mock("solid-toast", () => ({
+  default: { success: toast },
+}));
+
 const actionResultHandler = vi.fn();
 
 const MyComponent = () => {
@@ -24,12 +29,6 @@ describe("Install Provider", () => {
   beforeEach(() => actionResultHandler.mockClear());
 
   it("should render", async () => {
-    useSW.mockReturnValue({
-      needRefresh: [() => true],
-      offlineReady: [],
-      updateServiceWorker: null,
-    });
-
     const { getByRole } = render(() => (
       <InstallProvider>
         <MyComponent />
@@ -58,12 +57,6 @@ describe("Install Provider", () => {
   });
 
   it("should throw an error if prompt is not supported", async () => {
-    useSW.mockReturnValue({
-      needRefresh: [() => true],
-      offlineReady: [],
-      updateServiceWorker: null,
-    });
-
     const { getByRole } = render(() => (
       <InstallProvider>
         <MyComponent />
@@ -82,30 +75,13 @@ describe("Install Provider", () => {
     });
   });
 
-  it("should update service worker", async () => {
-    const MyOtherComponent = () => {
-      const context = useInstall();
+  it("should show a toast on offline ready", async () => {
+    useSW.mockImplementation(({ onOfflineReady }) => onOfflineReady());
 
-      return <button onClick={() => context.refresh()}>button</button>;
-    };
+    render(() => <InstallProvider>something</InstallProvider>);
 
-    const updateServiceWorker = vi.fn();
-
-    useSW.mockReturnValue({
-      needRefresh: [() => true],
-      offlineReady: [],
-      updateServiceWorker,
-    });
-
-    const { getByRole } = render(() => (
-      <InstallProvider>
-        <MyOtherComponent />
-      </InstallProvider>
-    ));
-
-    fireEvent.click(getByRole("button"));
-
-    await waitFor(() => expect(updateServiceWorker).toHaveBeenCalledOnce());
-    expect(updateServiceWorker).toHaveBeenCalledWith(true);
+    return waitFor(() =>
+      expect(toast).toHaveBeenCalledWith("App is available offline!"),
+    );
   });
 });
