@@ -8,6 +8,11 @@ vi.mock("virtual:pwa-register/solid", () => ({
   useRegisterSW: useSW,
 }));
 
+const toast = vi.hoisted(() => vi.fn());
+vi.mock("solid-toast", () => ({
+  default: { success: toast },
+}));
+
 const actionResultHandler = vi.fn();
 
 const MyComponent = () => {
@@ -24,12 +29,6 @@ describe("Install Provider", () => {
   beforeEach(() => actionResultHandler.mockClear());
 
   it("should render", async () => {
-    useSW.mockReturnValue({
-      needRefresh: [() => true],
-      offlineReady: [],
-      updateServiceWorker: null,
-    });
-
     const { getByRole } = render(() => (
       <InstallProvider>
         <MyComponent />
@@ -58,12 +57,6 @@ describe("Install Provider", () => {
   });
 
   it("should throw an error if prompt is not supported", async () => {
-    useSW.mockReturnValue({
-      needRefresh: [() => true],
-      offlineReady: [],
-      updateServiceWorker: null,
-    });
-
     const { getByRole } = render(() => (
       <InstallProvider>
         <MyComponent />
@@ -80,5 +73,15 @@ describe("Install Provider", () => {
       outcome: "dismissed",
       platform: "",
     });
+  });
+
+  it("should show a toast on offline ready", async () => {
+    useSW.mockImplementation(({ onOfflineReady }) => onOfflineReady());
+
+    render(() => <InstallProvider>something</InstallProvider>);
+
+    return waitFor(() =>
+      expect(toast).toHaveBeenCalledWith("App is available offline!"),
+    );
   });
 });
