@@ -39,3 +39,17 @@ it("should render a non-clickable pokemon", () => {
 
   expect(queryByRole("button")).not.toBeInTheDocument();
 });
+
+it("should render a non-clickable pokemon", () => {
+  const { queryByRole } = render(() => (
+    <Pokemon
+      id={1}
+      name="name"
+      size="medium"
+      sprite="some sprite"
+      types={["fire"]}
+    />
+  ));
+
+  expect(queryByRole("img")).toHaveAttribute("width", "64");
+});
