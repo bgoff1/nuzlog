@@ -1,12 +1,14 @@
 import { For, Show } from "solid-js";
 import { EmptyPokemon, Pokemon } from "../../components/common/pokemon";
 import { LoadingGrid } from "../../components/team-builder/loading-grid";
+import { useFilters } from "../../context/team-builder/filters";
 import { useTeam } from "../../context/team-builder/team";
 import { useBuilderData } from "../../hooks/team-builder/builder";
 import { MAX_TEAM_SIZE } from "../../util/constants";
 
 const BuilderPage = () => {
-  const { dispatcher, members, filters } = useTeam();
+  const { members, dispatcher } = useTeam();
+  const { filters } = useFilters();
 
   const state = useBuilderData(filters);
 

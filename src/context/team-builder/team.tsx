@@ -10,8 +10,7 @@ import {
 } from "./team-reducer";
 
 type TeamContextType = {
-  [Key in keyof TeamContextState]: Accessor<TeamContextState[Key]>;
-} & {
+  members: Accessor<TeamContextState["members"]>;
   dispatcher: (action: TeamContextAction) => void;
 };
 
@@ -20,7 +19,6 @@ const TeamContext = createContext<TeamContextType>("TeamContext");
 export const TeamProvider: Component<WithChildren> = (props) => {
   const [state, setState] = createStore<TeamContextState>({
     members: [],
-    filters: [],
   });
 
   const dispatcher = (action: TeamContextAction) =>
@@ -28,7 +26,6 @@ export const TeamProvider: Component<WithChildren> = (props) => {
 
   const contextValue: TeamContextType = {
     members: () => state.members,
-    filters: () => state.filters,
     dispatcher,
   };
 

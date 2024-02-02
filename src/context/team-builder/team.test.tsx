@@ -19,8 +19,18 @@ describe("Team Provider", () => {
       return (
         <>
           <div data-test-id="members">{JSON.stringify(context.members())}</div>
-          <div data-test-id="filters">{JSON.stringify(context.filters())}</div>
-          <button onClick={() => context.dispatcher({ type: "clearFilters" })}>
+          <button
+            onClick={() =>
+              context.dispatcher({
+                type: "addMember",
+                payload: {
+                  id: 1,
+                  name: "bulbasaur",
+                  sprite: "",
+                  types: ["grass", "poison"],
+                },
+              })
+            }>
             clear
           </button>
         </>
@@ -34,17 +44,23 @@ describe("Team Provider", () => {
     ));
 
     expect(getByTestId("members")).toHaveTextContent("[]");
-    expect(getByTestId("filters")).toHaveTextContent("[]");
 
     fireEvent.click(getByRole("button"));
 
     expect(reducer).toHaveBeenCalledOnce();
     expect(reducer).toHaveBeenCalledWith(
       {
-        filters: [],
         members: [],
       },
-      { type: "clearFilters" },
+      {
+        type: "addMember",
+        payload: {
+          id: 1,
+          name: "bulbasaur",
+          sprite: "",
+          types: ["grass", "poison"],
+        },
+      },
     );
   });
 });

@@ -59,7 +59,7 @@ describe("Builder", () => {
       expect(query).toHaveBeenCalledWith(
         expect.objectContaining({
           sql: expect.stringContaining(
-            'group_concat("pokemon_v2_type"."id") as "type_ids"',
+            'group_concat("type"."id") as "type_ids"',
           ),
         }),
       ),
@@ -90,8 +90,68 @@ describe("Builder", () => {
       expect(query).toHaveBeenCalledWith(
         expect.objectContaining({
           sql: expect.stringContaining(
-            '"pokemon_v2_pokemonspecies"."generation_id" in (?)',
+            '"pokemon_species"."generation_id" in (?)',
           ),
+          parameters: expect.arrayContaining([1]),
+        }),
+      ),
+    );
+  });
+
+  it("should do query with versions filters", () => {
+    query.mockResolvedValue([
+      {
+        sprites: JSON.stringify({ front_default: "my-url" } as PokemonSprites),
+        types: "fire,water",
+        id: 1,
+        name: "name",
+      },
+    ]);
+
+    renderHook(() =>
+      useBuilderData(() => [
+        {
+          type: "version",
+          label: "red",
+          value: 1,
+        },
+      ]),
+    );
+
+    return waitFor(() =>
+      expect(query).toHaveBeenCalledWith(
+        expect.objectContaining({
+          sql: expect.stringContaining('"version"."id" in (?)'),
+          parameters: expect.arrayContaining([1]),
+        }),
+      ),
+    );
+  });
+
+  it("should do query with regions filters", () => {
+    query.mockResolvedValue([
+      {
+        sprites: JSON.stringify({ front_default: "my-url" } as PokemonSprites),
+        types: "fire,water",
+        id: 1,
+        name: "name",
+      },
+    ]);
+
+    renderHook(() =>
+      useBuilderData(() => [
+        {
+          type: "region",
+          label: "kanto",
+          value: 1,
+        },
+      ]),
+    );
+
+    return waitFor(() =>
+      expect(query).toHaveBeenCalledWith(
+        expect.objectContaining({
+          sql: expect.stringContaining('"region"."id" in (?)'),
           parameters: expect.arrayContaining([1]),
         }),
       ),

@@ -23,10 +23,13 @@ export const databaseQuery = <T>(
     console.log(`${query};`);
   }
 
-  const [{ columns, values }] = db.exec(
+  const queryResult = db.exec(
     compiledQuery.sql,
     compiledQuery.parameters as SqlValue[],
   );
+
+  const values = queryResult[0]?.values ?? [];
+  const columns = queryResult[0]?.columns ?? [];
 
   const result = values.map((row) =>
     columns.reduce(
