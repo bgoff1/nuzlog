@@ -12,4 +12,24 @@ describe("Link", () => {
 
     expect(getByRole("link")).toHaveTextContent("some link");
   });
+
+  it("should render a link with parameters", () => {
+    const { getByRole } = render(() => (
+      <Link href="/encyclopedia/:id" params={{ id: "123" }}>
+        some link
+      </Link>
+    ));
+
+    expect(getByRole("link")).toHaveAttribute("href", "/encyclopedia/123");
+  });
+
+  it("should handle unnecessary casting for some reason", () => {
+    const { getByRole } = render(() => (
+      <Link href="/encyclopedia/:id" params={null as never}>
+        some link
+      </Link>
+    ));
+
+    expect(getByRole("link")).toHaveAttribute("href", "/encyclopedia/:id");
+  });
 });

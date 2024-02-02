@@ -2,7 +2,8 @@ import { fireEvent, render, waitFor } from "@solidjs/testing-library";
 import type { JSX } from "solid-js";
 import { SidebarLink } from "./SidebarLink";
 
-vi.mock("../../common/icons", () => ({
+vi.mock("../../common/icons", async (importOriginal) => ({
+  ...((await importOriginal()) ?? {}),
   ConstructionIcon: () => <div data-test-id="construction" />,
   PokeballIcon: () => <div data-test-id="pokeball" />,
 }));

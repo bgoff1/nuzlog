@@ -19,22 +19,22 @@ type LinkParams<TRoute extends keyof ParameterizedRoutes> =
   | LinkWithParams<TRoute>
   | LinkWithoutParams;
 
-// const isLinkWithParams = <TRoute extends keyof ParameterizedRoutes>(
-//   params: LinkParams<TRoute>,
-// ): params is LinkWithParams<TRoute> =>
-//   (params as LinkWithParams<TRoute>).params !== undefined;
+const isLinkWithParams = <TRoute extends keyof ParameterizedRoutes>(
+  params: LinkParams<TRoute>,
+): params is LinkWithParams<TRoute> =>
+  (params as LinkWithParams<TRoute>).params !== undefined;
 
-// const buildLinkWithParams = <TRoute extends keyof ParameterizedRoutes>(
-//   url: TRoute,
-//   params: ParameterizedRoutes[TRoute],
-// ) => {
-//   let newLink = url.toString();
-//   for (const [key, value] of Object.entries(params ?? {})) {
-//     newLink = newLink.replace(`:${key}`, value as string);
-//   }
+const buildLinkWithParams = <TRoute extends keyof ParameterizedRoutes>(
+  url: TRoute,
+  params: ParameterizedRoutes[TRoute],
+) => {
+  let newLink = url.toString();
+  for (const [key, value] of Object.entries(params ?? {})) {
+    newLink = newLink.replace(`:${key}`, value as string);
+  }
 
-//   return newLink;
-// };
+  return newLink;
+};
 
 export const Link = <TRoute extends keyof ParameterizedRoutes>(
   props: Omit<AnchorProps, "children"> & {
@@ -45,10 +45,9 @@ export const Link = <TRoute extends keyof ParameterizedRoutes>(
     <A
       {...props}
       href={
-        props.href
-        // isLinkWithParams(props)
-        //   ? buildLinkWithParams(props.href, props.params)
-        //   : props.href
+        isLinkWithParams(props)
+          ? buildLinkWithParams(props.href, props.params)
+          : props.href
       }
     />
   );

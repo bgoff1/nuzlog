@@ -3,3 +3,7 @@
 html:not([data-theme="latte"]) {
   color-scheme: dark;
 }
+
+::-webkit-progress-value {
+  transition: width 1s;
+}

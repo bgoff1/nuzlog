@@ -1,6 +1,6 @@
 import type { IconTypes } from "solid-icons";
 import type { NonParameterizedRoutes } from "../../../route-tree.gen";
-import { PokeballIcon } from "../../common/icons";
+import { EncyclopediaIcon, PokeballIcon } from "../../common/icons";
 
 type LinkItemBase = {
   label: string;
@@ -22,6 +22,11 @@ export const links: LinkItem[] = [
     href: "/team-builder",
     label: "Team Builder",
     icon: PokeballIcon,
+  },
+  {
+    href: "/encyclopedia",
+    label: "Encyclopedia",
+    icon: EncyclopediaIcon,
   },
 ];
 

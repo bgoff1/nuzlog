@@ -7,7 +7,7 @@ import { query } from "../../database/query";
 import { queryBuilder } from "../../database/query-builder";
 import type { PokemonType } from "../../types/pokemon-types";
 
-const getBaseQuery = () =>
+export const getBasePokemonQuery = () =>
   queryBuilder
     .selectFrom([
       "pokemon_v2_pokemon as pokemon",
@@ -34,7 +34,7 @@ const getBaseQuery = () =>
     .groupBy("pokemon.id");
 
 const getFilteredQuery = (filters: Record<Filter["type"], Filter[]>) => {
-  let baseQuery = getBaseQuery();
+  let baseQuery = getBasePokemonQuery();
 
   if (filters.generation.length) {
     baseQuery = baseQuery
@@ -153,14 +153,14 @@ const getFormattedPokemon = async (filters: Filter[]) => {
 
   const formattedPokemon = pokemon
     .map((each) => {
-      const sprites = JSON.parse(each.sprites) as PokemonSprites;
-      const types: PokemonType[] = each.types.split(",") as PokemonType[];
+      const sprite = getSpriteFromDBSprite(each.sprites);
+      const types = getTypesFromDBTypes(each.types);
       const typeIds = (each.type_ids ?? "").split(",").map((id) => +id);
 
       return {
         id: each.id,
         name: each.name,
-        sprite: sprites.front_default!,
+        sprite,
         typeIds,
         types,
       };
@@ -191,4 +191,14 @@ export const useBuilderData = (filters: Accessor<Filter[]>) => {
     queryKey: ["pokemon", ...filters().map((x) => JSON.stringify(x))],
     queryFn: () => getFormattedPokemon(filters()),
   }));
+};
+
+export const getSpriteFromDBSprite = (sprites: string) => {
+  const pokemonSprites = JSON.parse(sprites) as PokemonSprites;
+
+  return pokemonSprites.front_default!;
+};
+
+export const getTypesFromDBTypes = (types: string) => {
+  return types.split(",") as PokemonType[];
 };
