@@ -10,25 +10,17 @@ export const useEffectiveness = () => {
       const matchupList = await query(
         queryBuilder
           .selectFrom([
-            "pokemon_v2_typeefficacy",
+            "pokemon_v2_typeefficacy as type_efficacy",
             "pokemon_v2_type as damage_type",
             "pokemon_v2_type as target_type",
           ])
           .select([
-            "pokemon_v2_typeefficacy.damage_factor",
+            "type_efficacy.damage_factor",
             "damage_type.name as damage_type",
             "target_type.name as target_type",
           ])
-          .whereRef(
-            "pokemon_v2_typeefficacy.damage_type_id",
-            "=",
-            "damage_type.id",
-          )
-          .whereRef(
-            "pokemon_v2_typeefficacy.target_type_id",
-            "=",
-            "target_type.id",
-          )
+          .whereRef("type_efficacy.damage_type_id", "=", "damage_type.id")
+          .whereRef("type_efficacy.target_type_id", "=", "target_type.id")
           .compile(),
       );
 

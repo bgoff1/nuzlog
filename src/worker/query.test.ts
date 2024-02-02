@@ -59,6 +59,18 @@ describe("Query Database", () => {
     expect(log).not.toHaveBeenCalled();
   });
 
+  it("should handle db returning nothing", () => {
+    env.mockReturnValue({ debugQuery: false } as Env);
+    expect(
+      databaseQuery(mockQuery, {
+        ...mockDB,
+        exec: vi.fn().mockReturnValue([]),
+      }),
+    ).toEqual([]);
+
+    expect(log).not.toHaveBeenCalled();
+  });
+
   it("should debug query if wanted", () => {
     env.mockReturnValue({ debugQuery: true } as Env);
 

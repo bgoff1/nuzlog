@@ -1,6 +1,5 @@
 import { fireEvent, render } from "@solidjs/testing-library";
 import { createSignal } from "solid-js";
-import type { ListItem } from "../../types/list-item";
 import { FilterList } from "./filter-list";
 
 describe("Filter List", () => {
@@ -9,11 +8,11 @@ describe("Filter List", () => {
       <FilterList
         title="title"
         subtitle="subtitle"
-        filterState={[]}
         list={[
           {
             label: "label",
             value: 1,
+            enabled: false,
           },
         ]}
         onClick={() => {}}
@@ -30,16 +29,11 @@ describe("Filter List", () => {
       <FilterList
         title="title"
         subtitle="subtitle"
-        filterState={[
-          {
-            label: "label",
-            value: 1,
-          },
-        ]}
         list={[
           {
             label: "label",
             value: 1,
+            enabled: true,
           },
         ]}
         onClick={() => {}}
@@ -51,19 +45,19 @@ describe("Filter List", () => {
 
   it("should update collapse title on click of a checkbox", () => {
     const { getByRole, queryByText } = render(() => {
-      const [state, setState] = createSignal<ListItem<number>[]>([]);
+      const [enabled, setEnabled] = createSignal<boolean>(false);
       return (
         <FilterList
           title="title"
           subtitle="subtitle"
-          filterState={state()}
           list={[
             {
               label: "label",
               value: 1,
+              enabled: enabled(),
             },
           ]}
-          onClick={(newItem) => setState((prev) => [...prev, newItem])}
+          onClick={() => setEnabled((prev) => !prev)}
         />
       );
     });

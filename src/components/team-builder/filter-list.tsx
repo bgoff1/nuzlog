@@ -1,48 +1,44 @@
 import type { JSX } from "solid-js";
-import { For } from "solid-js";
+import { For, Show } from "solid-js";
 import type { ListItem } from "../../types/list-item";
 import { Checkbox } from "../common/checkbox";
 import { Collapse } from "../common/collapse";
 
-type FilterListProps<T> = {
+type CollapseTitleProps = {
   title: string;
   subtitle: string;
-  list: ListItem<T>[];
-  onClick: (item: ListItem<T>) => void;
-  filterState: ListItem<T>[];
+  enabledCount: number;
 };
 
-const CollapseTitle = <T,>(
-  props: Pick<FilterListProps<T>, "title" | "subtitle" | "filterState">,
-): JSX.Element => {
-  const filtersEnabled = () =>
-    props.filterState.filter((state) => state.value).length;
+type CollapseContentProps = {
+  list: Array<ListItem<number> & { enabled: boolean }>;
+  onClick: (item: ListItem<number>) => void;
+};
 
+type FilterListProps = CollapseContentProps &
+  Omit<CollapseTitleProps, "enabledCount">;
+
+const CollapseTitle = (props: CollapseTitleProps): JSX.Element => {
   return (
     <div class="flex select-none flex-col">
       <span class="text-lg">
-        {filtersEnabled()
-          ? `${props.title} (${filtersEnabled()})`
-          : props.title}
+        <Show when={props.enabledCount} fallback={props.title}>
+          {props.title} ({props.enabledCount})
+        </Show>
       </span>
       <span>{props.subtitle}</span>
     </div>
   );
 };
 
-const CollapseContent = <T,>(
-  props: Pick<FilterListProps<T>, "list" | "filterState" | "onClick">,
-): JSX.Element => (
+const CollapseContent = (props: CollapseContentProps): JSX.Element => (
   <>
     <For each={props.list}>
       {(item) => {
-        const filterItem = props.filterState.find(
-          (state) => state.value === item.value,
-        );
         return (
           <Checkbox
             onChange={() => props.onClick(item)}
-            checked={!!filterItem?.value}
+            checked={item.enabled}
             label={item.label}
           />
         );
@@ -51,23 +47,17 @@ const CollapseContent = <T,>(
   </>
 );
 
-export const FilterList = <T,>(props: FilterListProps<T>): JSX.Element => {
+export const FilterList = (props: FilterListProps): JSX.Element => {
   return (
     <Collapse
       title={
         <CollapseTitle
           title={props.title}
           subtitle={props.subtitle}
-          filterState={props.filterState}
+          enabledCount={props.list.filter((item) => item.enabled).length}
         />
       }
-      content={
-        <CollapseContent
-          list={props.list}
-          onClick={props.onClick}
-          filterState={props.filterState}
-        />
-      }
+      content={<CollapseContent list={props.list} onClick={props.onClick} />}
     />
   );
 };
