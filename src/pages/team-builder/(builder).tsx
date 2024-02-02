@@ -2,10 +2,13 @@ import { For, Show } from "solid-js";
 import { EmptyPokemon, Pokemon } from "../../components/common/pokemon";
 import { LoadingGrid } from "../../components/team-builder/loading-grid";
 import { useTeam } from "../../context/team-builder/team";
+import { useBuilderData } from "../../hooks/team-builder/builder";
 import { MAX_TEAM_SIZE } from "../../util/constants";
 
 const BuilderPage = () => {
-  const { dispatcher, members, data } = useTeam();
+  const { dispatcher, members, filters } = useTeam();
+
+  const state = useBuilderData(filters);
 
   const membersWithEmpties = () => {
     const team = members().map((member) => ({
@@ -26,7 +29,7 @@ const BuilderPage = () => {
   };
 
   const gridMembers = () => {
-    return data().filter(
+    return (state.data ?? []).filter(
       (pokemon) =>
         !members()
           .map((member) => member.id)
@@ -54,7 +57,7 @@ const BuilderPage = () => {
           )}
         </For>
       </ul>
-      <Show when={!data.loading} fallback={<LoadingGrid />}>
+      <Show when={!state.isLoading} fallback={<LoadingGrid />}>
         <ul class="flex flex-wrap justify-center gap-4">
           <For each={gridMembers()}>
             {(pokemon) => (

@@ -1,9 +1,9 @@
 import type { useEffectiveness } from "../../hooks/team-builder/coverage";
-import type { HookType } from "../../types/hook-type";
+import type { Defined, QueryHookType } from "../../types/hook-type";
 import type { PokemonType } from "../../types/pokemon-types";
 
 export const getMatchup = (
-  map: HookType<typeof useEffectiveness>,
+  map: Defined<QueryHookType<typeof useEffectiveness>>,
   types: PokemonType[],
   attack: PokemonType,
 ) => {

@@ -7,7 +7,7 @@ import { TeamMember } from "../../components/team-builder/team-coverage/team-mem
 import { useTeam } from "../../context/team-builder/team";
 import { useEffectiveness } from "../../hooks/team-builder/coverage";
 import { useTypes } from "../../hooks/team-builder/options";
-import type { HookType } from "../../types/hook-type";
+import type { Defined, QueryHookType } from "../../types/hook-type";
 import type { PokemonType } from "../../types/pokemon-types";
 import { getBackgroundColor, getTextColor } from "../../util/colors";
 import { getMatchup } from "../../util/team-coverage/get-matchup";
@@ -16,7 +16,7 @@ import { titleCase } from "../../util/titlecase";
 const getCounts = (
   team: ReturnType<ReturnType<typeof useTeam>["members"]>,
   type: { name: PokemonType; id: number },
-  map: HookType<typeof useEffectiveness>,
+  map: Defined<QueryHookType<typeof useEffectiveness>>,
 ) => {
   const weakCount = team.reduce((previous, current) => {
     const matchup = getMatchup(map, current.types, type.name);
@@ -39,7 +39,7 @@ const Coverage: Component = () => {
   return (
     <>
       <h1 class="sr-only">Team Builder Coverage</h1>
-      <Show when={!effectivenessMap.loading} fallback="loading...">
+      <Show when={!effectivenessMap.isLoading} fallback="loading...">
         <table class="h-full w-full border-separate" tabIndex={0}>
           <thead>
             <tr>
@@ -62,13 +62,13 @@ const Coverage: Component = () => {
             </tr>
           </thead>
           <tbody>
-            <For each={types()}>
+            <For each={types.data}>
               {(type) => {
                 const name = type.name.toLowerCase() as PokemonType;
                 const { weak, resist } = getCounts(
                   members(),
                   { id: type.id, name },
-                  effectivenessMap(),
+                  effectivenessMap.data!,
                 );
 
                 return (
@@ -84,7 +84,7 @@ const Coverage: Component = () => {
                     <For each={members()}>
                       {(member) => (
                         <TeamMember
-                          effectivenessMap={effectivenessMap()}
+                          effectivenessMap={effectivenessMap.data!}
                           types={member.types}
                           attacker={name}
                         />

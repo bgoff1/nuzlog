@@ -20,7 +20,6 @@ describe("Team Provider", () => {
         <>
           <div data-test-id="members">{JSON.stringify(context.members())}</div>
           <div data-test-id="filters">{JSON.stringify(context.filters())}</div>
-          <div data-test-id="data">{JSON.stringify(context.data())}</div>
           <button onClick={() => context.dispatcher({ type: "clearFilters" })}>
             clear
           </button>
@@ -36,7 +35,6 @@ describe("Team Provider", () => {
 
     expect(getByTestId("members")).toHaveTextContent("[]");
     expect(getByTestId("filters")).toHaveTextContent("[]");
-    expect(getByTestId("data")).toHaveTextContent("[]");
 
     fireEvent.click(getByRole("button"));
 

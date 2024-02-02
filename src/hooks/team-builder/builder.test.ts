@@ -24,7 +24,7 @@ describe("Builder", () => {
     const { result } = renderHook(() => useBuilderData(() => []));
 
     return waitFor(() =>
-      expect(result()).toEqual([
+      expect(result.data).toEqual([
         {
           sprite: "my-url",
           name: "name",

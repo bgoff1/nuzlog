@@ -2,7 +2,7 @@ import clsx from "clsx";
 import type { Component } from "solid-js";
 import { Show } from "solid-js";
 import type { useEffectiveness } from "../../../hooks/team-builder/coverage";
-import type { HookType } from "../../../types/hook-type";
+import type { Defined, QueryHookType } from "../../../types/hook-type";
 import type { PokemonType } from "../../../types/pokemon-types";
 import { getBackgroundColor } from "../../../util/colors";
 import { getMatchup } from "../../../util/team-coverage/get-matchup";
@@ -17,7 +17,7 @@ const matchupRecord: Record<number, string> = {
 };
 
 export const TeamMember: Component<{
-  effectivenessMap: HookType<typeof useEffectiveness>;
+  effectivenessMap: Defined<QueryHookType<typeof useEffectiveness>>;
   types: PokemonType[];
   attacker: PokemonType;
 }> = (props) => {

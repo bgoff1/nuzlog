@@ -1,7 +1,7 @@
 import type { PokemonSprites } from "@bgoff1/pokeapi-types";
+import { createQuery } from "@tanstack/solid-query";
 import { sql } from "kysely";
 import type { Accessor } from "solid-js";
-import { createResource } from "solid-js";
 import type { Filter } from "../../context/team-builder/team-reducer";
 import { query } from "../../database/query";
 import { queryBuilder } from "../../database/query-builder";
@@ -160,13 +160,8 @@ const getFormattedPokemon = async (filters: Filter[]) => {
 };
 
 export const useBuilderData = (filters: Accessor<Filter[]>) => {
-  const [data] = createResource(
-    filters,
-    (currentFilters) => getFormattedPokemon(currentFilters),
-    {
-      initialValue: [],
-    },
-  );
-
-  return data;
+  return createQuery(() => ({
+    queryKey: ["pokemon", ...filters().map((x) => JSON.stringify(x))],
+    queryFn: () => getFormattedPokemon(filters()),
+  }));
 };

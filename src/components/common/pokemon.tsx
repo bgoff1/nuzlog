@@ -2,10 +2,10 @@ import clsx from "clsx";
 import type { Component } from "solid-js";
 import { Show } from "solid-js";
 import type { useBuilderData } from "../../hooks/team-builder/builder";
-import type { HookType } from "../../types/hook-type";
+import type { Defined, QueryHookType } from "../../types/hook-type";
 import { getBackgroundColor, getBorderColor } from "../../util/colors";
 
-type PokemonProp = HookType<typeof useBuilderData>[number];
+type PokemonProp = Defined<QueryHookType<typeof useBuilderData>>[number];
 
 const PokemonImage: Component<
   Omit<PokemonProp, "id"> & { responsive?: true }
@@ -39,17 +39,17 @@ type WithOnClick = {
   onClick: () => void;
 };
 
-export const Pokemon = (
-  props: ReturnType<ReturnType<typeof useBuilderData>>[number] &
-    (WithOnClick | { class: string }),
-) => {
+type WithClass = {
+  class: string;
+};
+
+export const Pokemon = (props: PokemonProp & (WithOnClick | WithClass)) => {
   return (
     <>
       <Show
         when={"onClick" in props && props}
         fallback={
-          <div
-            class={clsx((props as { class: string }).class, "flex flex-col")}>
+          <div class={clsx((props as WithClass).class, "flex flex-col")}>
             <PokemonImage
               name={props.name}
               sprite={props.sprite}

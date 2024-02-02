@@ -1,8 +1,9 @@
 import type { useBuilderData } from "../../hooks/team-builder/builder";
+import type { Defined, QueryHookType } from "../../types/hook-type";
 import type { ListItem } from "../../types/list-item";
 import { MAX_TEAM_SIZE } from "../../util/constants";
 
-type Member = ReturnType<ReturnType<typeof useBuilderData>>[number];
+type Member = Defined<QueryHookType<typeof useBuilderData>>[number];
 export type Filter = {
   type: "generation" | "type" | "fullyEvolved";
 } & ListItem<number>;

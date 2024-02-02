@@ -1,10 +1,11 @@
-import { createResource } from "solid-js";
+import { createQuery } from "@tanstack/solid-query";
 import { query } from "../../database/query";
 import { queryBuilder } from "../../database/query-builder";
 
 export const useTypes = () => {
-  const [types] = createResource(
-    () =>
+  return createQuery(() => ({
+    queryKey: ["types"],
+    queryFn: () =>
       query(
         queryBuilder
           .selectFrom([
@@ -24,15 +25,13 @@ export const useTypes = () => {
           .orderBy("pokemon_v2_type.id")
           .compile(),
       ),
-    { initialValue: [] },
-  );
-
-  return types;
+  }));
 };
 
 export const useGenerations = () => {
-  const [generation] = createResource(
-    () =>
+  return createQuery(() => ({
+    queryKey: ["generations"],
+    queryFn: () =>
       query(
         queryBuilder
           .selectFrom([
@@ -58,8 +57,46 @@ export const useGenerations = () => {
           .orderBy("pokemon_v2_generation.id")
           .compile(),
       ),
-    { initialValue: [] },
-  );
+  }));
+};
 
-  return generation;
+export const useRegions = () => {
+  return createQuery(() => ({
+    queryKey: ["regions"],
+    queryFn: () =>
+      query(
+        queryBuilder
+          .selectFrom([
+            "pokemon_v2_region as region",
+            "pokemon_v2_regionname as region_name",
+            "pokemon_v2_language as language",
+          ])
+          .select(["region.id", "region_name.name"])
+          .whereRef("region.id", "=", "region_name.region_id")
+          .whereRef("region_name.language_id", "=", "language.id")
+          .where("language.name", "=", "en")
+          .compile(),
+      ),
+  }));
+};
+
+export const useVersions = () => {
+  return createQuery(() => ({
+    queryKey: ["versions"],
+    queryFn: () => {
+      return query(
+        queryBuilder
+          .selectFrom([
+            "pokemon_v2_version as version",
+            "pokemon_v2_versionname as version_name",
+            "pokemon_v2_language as language",
+          ])
+          .select(["version_name.name", "version.id"])
+          .whereRef("version.id", "=", "version_name.version_id")
+          .whereRef("version_name.language_id", "=", "language.id")
+          .where("language.name", "=", "en")
+          .compile(),
+      );
+    },
+  }));
 };

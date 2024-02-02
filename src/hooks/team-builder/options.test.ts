@@ -1,5 +1,5 @@
 import { renderHook, waitFor } from "@solidjs/testing-library";
-import { useGenerations, useTypes } from "./options";
+import { useGenerations, useRegions, useTypes, useVersions } from "./options";
 
 const query = vi.hoisted(() => vi.fn());
 
@@ -21,7 +21,7 @@ describe("Builder Options", () => {
     const { result } = renderHook(() => useTypes());
 
     return waitFor(() =>
-      expect(result()).toEqual([
+      expect(result.data).toEqual([
         {
           name: "fire",
           id: 1,
@@ -41,9 +41,49 @@ describe("Builder Options", () => {
     const { result } = renderHook(() => useGenerations());
 
     return waitFor(() =>
-      expect(result()).toEqual([
+      expect(result.data).toEqual([
         {
           name: "gen 1",
+          id: 1,
+        },
+      ]),
+    );
+  });
+
+  it("should get regions", () => {
+    query.mockResolvedValue([
+      {
+        name: "kanto",
+        id: 1,
+      },
+    ]);
+
+    const { result } = renderHook(() => useRegions());
+
+    return waitFor(() =>
+      expect(result.data).toEqual([
+        {
+          name: "kanto",
+          id: 1,
+        },
+      ]),
+    );
+  });
+
+  it("should get versions", () => {
+    query.mockResolvedValue([
+      {
+        name: "red",
+        id: 1,
+      },
+    ]);
+
+    const { result } = renderHook(() => useVersions());
+
+    return waitFor(() =>
+      expect(result.data).toEqual([
+        {
+          name: "red",
           id: 1,
         },
       ]),

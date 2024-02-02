@@ -1,20 +1,26 @@
 import { Checkbox } from "../../components/common/checkbox";
 import { FilterList } from "../../components/team-builder/filter-list";
 import { useTeam } from "../../context/team-builder/team";
-import { useGenerations, useTypes } from "../../hooks/team-builder/options";
-import type { ListItem } from "../../types/list-item";
+import {
+  useGenerations,
+  useRegions,
+  useTypes,
+  useVersions,
+} from "../../hooks/team-builder/options";
 
-const databaseMapper = (item: {
-  name: string;
-  id: number;
-}): ListItem<number> => ({
-  label: item.name,
-  value: item.id,
-});
+const databaseMapper = (
+  items: Array<{ name: string; id: number }> | undefined,
+) =>
+  (items ?? []).map((item) => ({
+    label: item.name,
+    value: item.id,
+  }));
 
 const BuilderOptionsPage = () => {
   const types = useTypes();
   const generations = useGenerations();
+  const regions = useRegions();
+  const versions = useVersions();
   const { filters, dispatcher } = useTeam();
 
   return (
@@ -24,10 +30,7 @@ const BuilderOptionsPage = () => {
         <FilterList
           title="Types"
           subtitle="Show pokemon that have a certain type"
-          list={types().map((type) => ({
-            label: type.name,
-            value: type.id,
-          }))}
+          list={databaseMapper(types.data)}
           filterState={filters().filter((filter) => filter.type === "type")}
           onClick={(filter) =>
             dispatcher({
@@ -40,10 +43,25 @@ const BuilderOptionsPage = () => {
             })
           }
         />
+
+        <FilterList
+          title="Regions"
+          subtitle="Show pokemon found in a region"
+          list={databaseMapper(regions.data)}
+          filterState={[]}
+          onClick={() => {}}
+        />
+        <FilterList
+          title="Version"
+          subtitle="Show pokemon found in a version"
+          list={databaseMapper(versions.data)}
+          filterState={[]}
+          onClick={() => {}}
+        />
         <FilterList
           title="Generations"
           subtitle="Show pokemon that were introduced in a generation"
-          list={generations().map(databaseMapper)}
+          list={databaseMapper(generations.data)}
           filterState={filters().filter(
             (filter) => filter.type === "generation",
           )}

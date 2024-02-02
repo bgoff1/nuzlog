@@ -1,12 +1,12 @@
 import type { CompiledQuery } from "kysely";
 import type { Database, SqlValue } from "sql.js";
+import { env } from "../env";
 
 export const databaseQuery = <T>(
   compiledQuery: CompiledQuery<T>,
   db: Database,
 ): T[] => {
-  const shouldDebugQuery = import.meta.env.VITE_DEBUG_QUERY === "true";
-
+  const shouldDebugQuery = env().debugQuery;
   if (shouldDebugQuery) {
     const query = compiledQuery.parameters.reduce(
       (previous: string, current: unknown) => {
